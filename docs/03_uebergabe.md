@@ -63,10 +63,22 @@ tools/gen_icons.py      Reproduzierbarer Icon-Generator (nur Python-Standardbibl
 ## 4. Offene Punkte / bewusst später
 
 - **KI-Modul (als Nächstes, optional, BYOK).** Laut Freigabe „Kern zuerst". Geplant: (a) Wissens-Chat zu Misophonie/Misokinesie (sendet nichts Persönliches); (b) Wochen-Zusammenfassung fürs Therapiegespräch. Beides über einen **eigenen API-Schlüssel** der Person (direkt vom Gerät zum Anbieter, kein Server von uns). Die Wochen-Zusammenfassung gibt es **schon jetzt ohne KI** als Export — die KI wäre nur die „Politur". Andockpunkte im Code: neues `js/ai.js` + Einstiege in `settings.js` (Schlüssel) und `journal.js` (Zusammenfassung).
-- **Eigene Icon-Gestaltung.** Aktuell schlichte „leiser werdende Ringe". Bei Wunsch leicht austauschbar (`tools/gen_icons.py`).
 - **Trigger-/Erinnerungs-Logik.** Bewusst kein Push/keine Erinnerungen (Hypervigilanz-Schutz). Falls je gewünscht: nur opt-in, ohne Symptom-Abfragen.
 - **Weitere Sprachen.** Aktuell nur Deutsch (wie vereinbart).
 - **Testabdeckung.** Es gibt einen Browser-Smoke-Test (`tools/smoke-test` siehe unten), aber keine Unit-Tests — bei der schlanken, framework-losen Struktur bewusst leichtgewichtig gehalten.
+
+---
+
+## 4b. v1.1 — Änderungen nach dem ersten Nutzerinnen-Test
+
+Nach 5 Minuten Test durch eine Betroffene kamen konkrete Rückmeldungen; alle umgesetzt:
+
+- **Neue Kernfunktion „Mein Weg"** (`js/path.js`): langfristige Entwicklung in kleinen täglichen Schritten (1–3 Min.), individuell abgestimmt auf die im Onboarding gewählten Situationen; wöchentlich rotierender Skill-Fokus (Aufmerksamkeit, Körper, Umdeuten, Selbstmitgefühl, Situationen, Sprechen); ausdrücklich ohne Exposition und ohne Streaks. Übungs-Protokoll lokal (`practiceLog` in IndexedDB, im Backup enthalten). Neue Onboarding-Option „Langfristige Entwicklung" priorisiert den Bereich.
+- **Eigene SVG-Icons statt Emojis** (`js/icons.js`): einheitliches, selbst gezeichnetes Linien-Icon-Set (24×24, currentColor) in der ganzen App.
+- **iOS-Fixes:** Onboarding hat jetzt feste Höhe mit internem Scroll — der Weiter-Button ist immer sichtbar; mehr Abstand über der Tab-Leiste; die Tab-Leiste fängt nur noch Taps auf der Pille selbst (behebt: „Vorbereiten öffnete Jetzt Hilfe" — der unsichtbare Balkenbereich hatte Taps geschluckt).
+- **Sprache:** Trigger-Frage heißt jetzt „Was sind deine Auslöser?"; „ohne Serie" → „ohne Streaks"; Tagebuch-„Kontext" → **„Situation"**; „Für die Therapie" → **„Datenexport"**.
+- **Tagebuch erweitert:** mehr Situationen (Menschenmengen, Feiern & Events, Outdoor-Festival, Restaurant/Café, Einkaufen) inkl. neuer Vorbereiten-Karten; mehr „Was hat geholfen"-Optionen (Weggeschaut, Angesprochen, Mit jemandem geredet).
+- Service-Worker-Cache auf `misonie-v2` (Bestandsinstallationen erhalten das Update beim nächsten Öffnen).
 
 ---
 

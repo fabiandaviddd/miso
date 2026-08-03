@@ -2,6 +2,7 @@
 import { el, mount, toast } from './ui.js';
 import { SOS_TOOLS, DISCLAIMER } from './data.js';
 import { exportAll, importAll, wipeAll, getProfile, defaultProfile, saveProfile } from './store.js';
+import { icon } from './icons.js';
 
 export async function renderSettings(app) {
   const p = app.profile;
@@ -31,7 +32,7 @@ export async function renderSettings(app) {
     const on = enabled.has(t.id);
     const btn = el('button', { class: 'tile', 'aria-pressed': on ? 'true' : 'false',
       style: on ? { borderColor: 'var(--green-deep)' } : { opacity: '0.6' } }, [
-      el('span', { class: 'emoji', html: t.emoji }),
+      el('span', { class: 'emoji', html: icon(t.icon) }),
       el('span', { class: 't-body' }, [el('span', { class: 't-title', text: t.title }), el('span', { class: 't-sub', text: t.sub })]),
       el('span', { class: 'chev', html: on ? '✓' : '＋' }),
     ]);
@@ -58,7 +59,7 @@ export async function renderSettings(app) {
 
   // Datensicherung
   view.append(el('div', { class: 'card' }, [
-    el('h3', { text: '🔒 Deine Daten' }),
+    el('h3', { class: 'h-icon' }, [el('span', { class: 'icon', html: icon('lock') }), 'Deine Daten']),
     el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Alles bleibt nur auf diesem Gerät. Ohne Sicherung gehen deine Einträge verloren, wenn du das Gerät wechselst oder den Browser-Speicher löschst.' }),
     el('div', { class: 'btn-row' }, [
       el('button', { class: 'btn btn-ghost', onClick: doExport }, 'Sicherung exportieren'),

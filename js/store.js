@@ -105,16 +105,27 @@ export async function getEntries() {
   return (all || []).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 }
 
+// ---------- Freie Schlüssel/Werte (z. B. Übungs-Protokoll "Mein Weg") ----------
+export async function getKV(key) {
+  return tx('kv', 'readonly', os => reqP(os.get(key)));
+}
+
+export async function setKV(key, value) {
+  await tx('kv', 'readwrite', os => os.put(value, key));
+}
+
 // ---------- Backup / Wiederherstellung ----------
 export async function exportAll() {
   const profile = await getProfile();
   const entries = await getEntries();
+  const practiceLog = await getKV('practiceLog');
   return {
     app: 'MisoNIE',
     schema: SCHEMA_VERSION,
     exportedAt: new Date().toISOString(),
     profile,
     entries,
+    practiceLog: practiceLog || null,
   };
 }
 
@@ -124,6 +135,7 @@ export async function importAll(data) {
   if (Array.isArray(data.entries)) {
     await tx('journal', 'readwrite', os => { data.entries.forEach(e => { if (e && e.id) os.put(e); }); });
   }
+  if (data.practiceLog) await setKV('practiceLog', data.practiceLog);
 }
 
 export async function wipeAll() {

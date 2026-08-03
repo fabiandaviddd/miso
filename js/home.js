@@ -1,12 +1,15 @@
 // Adaptive Startseite. Reihenfolge & Sichtbarkeit richten sich nach dem
 // Onboarding: die App passt sich der Person an, nicht umgekehrt.
 import { el } from './ui.js';
+import { icon } from './icons.js';
 import { getEntries } from './store.js';
+import { todaysPractice } from './path.js';
 
 const AREAS = {
-  verstehen:   { emoji: '💚', title: 'Verstehen', sub: 'Was Misophonie ist — und dass du nicht allein bist', route: 'verstehen' },
-  vorbereiten: { emoji: '🧭', title: 'Vorbereiten', sub: 'Für schwierige Situationen & Gespräche gewappnet sein', route: 'vorbereiten' },
-  tagebuch:    { emoji: '📔', title: 'Tagebuch', sub: 'Kurz festhalten — auch für deine Therapie', route: 'tagebuch' },
+  weg:         { icon: 'route', title: 'Mein Weg', sub: 'Jeden Tag ein kleiner Schritt — abgestimmt auf dich', route: 'weg' },
+  verstehen:   { icon: 'lightbulb', title: 'Verstehen', sub: 'Was Misophonie ist — und dass du nicht allein bist', route: 'verstehen' },
+  vorbereiten: { icon: 'map', title: 'Vorbereiten', sub: 'Für schwierige Situationen & Gespräche gewappnet sein', route: 'vorbereiten' },
+  tagebuch:    { icon: 'book', title: 'Tagebuch', sub: 'Kurz festhalten — mit Datenexport für deine Therapie', route: 'tagebuch' },
 };
 
 export async function renderHome(app) {
@@ -37,18 +40,22 @@ export async function renderHome(app) {
       el('h2', { text: 'Bist du gerade getriggert?' }),
       el('p', { class: 'muted', text: 'Ein Fingertipp — und wir gehen zusammen durch den Moment. Kein Nachdenken nötig.' }),
       el('button', { class: 'btn btn-primary', style: { marginTop: '6px' }, onClick: () => app.openSOS() },
-        [el('span', { html: '🆘' }), ' Jetzt Hilfe']),
+        [el('span', { class: 'icon', html: icon('rings') }), ' Jetzt Hilfe']),
     ]));
   }
 
-  // Tagesanker — nur wenn Struktur gewünscht ist
+  // Tagesanker — nur wenn Struktur gewünscht: zeigt den heutigen Schritt
   if (p.likesStructure === true) {
+    const practice = todaysPractice(p);
     view.append(el('div', { class: 'card' }, [
       el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'Dein Tagesanker' }),
-      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Eine Minute Ruhe, wann immer du magst. Ohne Druck, ohne Serie.' }),
+      el('p', { style: { marginTop: 0, marginBottom: '4px', fontWeight: 600 }, text: `Heute: ${practice.title}` }),
+      el('p', { class: 'muted small', style: { marginTop: 0 }, text: `Ca. ${practice.minutes} Min. — ohne Druck, ohne Streaks.` }),
       el('div', { class: 'btn-row' }, [
-        el('button', { class: 'btn btn-ghost', onClick: () => app.openSOS('breathe') }, '🫧 Kurz atmen'),
-        el('button', { class: 'btn btn-ghost', onClick: () => app.navigate('tagebuch') }, '📔 Eintrag'),
+        el('button', { class: 'btn btn-ghost', onClick: () => app.navigate('weg') },
+          [el('span', { class: 'icon', html: icon('route') }), ' Zum Schritt']),
+        el('button', { class: 'btn btn-ghost', onClick: () => app.openSOS('breathe') },
+          [el('span', { class: 'icon', html: icon('breathe') }), ' Kurz atmen']),
       ]),
     ]));
   }
@@ -58,7 +65,7 @@ export async function renderHome(app) {
   for (const key of orderedAreas(p)) {
     const a = AREAS[key];
     view.append(el('button', { class: 'tile', onClick: () => app.navigate(a.route) }, [
-      el('span', { class: 'emoji', html: a.emoji }),
+      el('span', { class: 'emoji', html: icon(a.icon) }),
       el('span', { class: 't-body' }, [
         el('span', { class: 't-title', text: a.title }),
         el('span', { class: 't-sub', text: a.sub }),
@@ -67,17 +74,19 @@ export async function renderHome(app) {
     ]));
   }
 
-  // Fuß: leiser Hinweis auf Hilfe + Einstellungen
+  // Fuß: leiser Hinweis auf Hilfe
   view.append(el('div', { style: { marginTop: '10px' } }, [
-    el('button', { class: 'btn btn-quiet', onClick: () => app.navigate('hilfe') }, '🤍 Hilfe holen'),
+    el('button', { class: 'btn btn-quiet', onClick: () => app.navigate('hilfe') },
+      [el('span', { class: 'icon', html: icon('heart') }), ' Hilfe holen']),
   ]));
 
   return view;
 }
 
 function orderedAreas(p) {
-  const base = ['verstehen', 'vorbereiten', 'tagebuch'];
+  const base = ['weg', 'verstehen', 'vorbereiten', 'tagebuch'];
   const score = (k) => {
+    if (k === 'weg' && p.needs.includes('develop')) return 0;
     if (k === 'tagebuch' && p.needs.includes('journal')) return 0;
     if (k === 'verstehen' && p.needs.includes('understand')) return 0;
     return 1;

@@ -4,6 +4,7 @@
 // eine Sache pro Schritt, nichts erzwungen.
 import { el, mount, buzz } from './ui.js';
 import { TRIGGERS, SITUATIONS, HELPS, SOS_TOOLS, DISCLAIMER } from './data.js';
+import { icon } from './icons.js';
 
 export function renderOnboarding(app, root) {
   const draft = app.profile; // Default-Profil, wird hier befüllt
@@ -35,7 +36,8 @@ export function renderOnboarding(app, root) {
         class: 'ob-dot' + (idx < i ? ' done' : idx === i ? ' active' : ''),
       })));
 
-    const body = el('div', { class: 'ob-body' }, step.body(ctx));
+    const body = el('div', { class: 'ob-body' },
+      el('div', { class: 'ob-content' }, step.body(ctx)));
 
     const isLast = i === steps.length - 1;
     const foot = el('div', { class: 'ob-foot' }, [
@@ -69,7 +71,8 @@ function buildSteps() {
         el('p', { class: 'sub', text: 'Was du erlebst, ist real. Hier musst du dich nicht erklären, nichts rechtfertigen und nichts „aushalten“.' }),
         el('p', { class: 'sub', text: 'Ich lerne dich in ein paar ruhigen Schritten kennen und richte mich dann nach dir — nicht umgekehrt.' }),
         el('div', { class: 'note soft', style: { marginTop: '18px' } }, [
-          '🔒 Alles, was du mir erzählst, bleibt auf diesem Gerät. Kein Konto, kein Server, keine Weitergabe.',
+          el('span', { class: 'icon', html: icon('lock') }),
+          ' Alles, was du mir erzählst, bleibt auf diesem Gerät. Kein Konto, kein Server, keine Weitergabe.',
         ]),
         el('p', { class: 'ob-hint', text: 'Du kannst jederzeit etwas überspringen und später alles ändern.' }),
       ],
@@ -89,7 +92,7 @@ function buildSteps() {
             onInput: (e) => { ctx.draft.name = e.target.value.trim(); },
           }),
         ]),
-        el('p', { class: 'ob-hint', text: '💬 Tipp: Du kannst überall auch die Diktierfunktion deiner Tastatur nutzen.' }),
+        el('p', { class: 'ob-hint', text: 'Tipp: Du kannst überall auch die Diktierfunktion deiner Tastatur nutzen (Mikrofon auf der Tastatur).' }),
       ],
     },
 
@@ -101,10 +104,11 @@ function buildSteps() {
         el('h1', { text: 'Was brauchst du gerade am meisten?' }),
         el('p', { class: 'sub', text: 'Mehrfachauswahl ist okay. Danach richte ich meine Startseite danach aus.' }),
         multiChips(ctx, 'needs', [
-          { id: 'moment', label: '🆘 Hilfe im Moment' },
-          { id: 'understand', label: '💚 Verstehen & Ruhe' },
-          { id: 'journal', label: '📔 Ein Tagebuch für Therapie' },
-          { id: 'unsure', label: '🤍 Weiß ich noch nicht' },
+          { id: 'moment', icon: 'rings', label: 'Hilfe im Moment' },
+          { id: 'develop', icon: 'route', label: 'Langfristige Entwicklung' },
+          { id: 'understand', icon: 'lightbulb', label: 'Verstehen & Ruhe' },
+          { id: 'journal', icon: 'book', label: 'Ein Tagebuch für Therapie' },
+          { id: 'unsure', icon: 'heart', label: 'Weiß ich noch nicht' },
         ]),
       ],
     },
@@ -116,8 +120,8 @@ function buildSteps() {
         const wrap = el('div', { class: 'stack' });
         wrap.append(
           el('div', { class: 'kicker', text: 'Kennenlernen' }),
-          el('h1', { text: 'Was löst bei dir aus?' }),
-          el('p', { class: 'sub', text: 'Tippe an, was passt. Nichts hier wird abgespielt — du liest nur.' }),
+          el('h1', { text: 'Was sind deine Auslöser?' }),
+          el('p', { class: 'sub', text: 'Tippe an, was dich trifft — beim Hören, beim Sehen oder schon im Voraus. Nichts davon wird abgespielt, du liest nur.' }),
         );
         for (const key of ['hear', 'see', 'anticipate']) {
           const group = TRIGGERS[key];
@@ -139,7 +143,7 @@ function buildSteps() {
         el('h1', { text: 'Wo ist es am schwersten?' }),
         el('p', { class: 'sub', text: 'Das hilft mir, dir passende Vorbereitungen anzubieten.' }),
         el('div', { class: 'chips', style: { marginTop: '6px' } },
-          SITUATIONS.map(s => chip(s.emoji + ' ' + s.label,
+          SITUATIONS.map(s => chip([iconSpan(s.icon), s.label],
             ctx.draft.situations.includes(s.id),
             (on) => toggle(ctx.draft.situations, s.id, on)))),
       ],
@@ -153,9 +157,9 @@ function buildSteps() {
         el('h1', { text: 'Magst du Struktur?' }),
         el('p', { class: 'sub', text: 'Manche mögen Abhaken, Routinen und Überblick. Andere fühlen sich davon eher unter Druck. Beides ist völlig okay.' }),
         el('div', { class: 'stack', style: { marginTop: '8px' } }, [
-          bigChoice('✅ Ja, Struktur tut mir gut', 'Ich mag Routinen und den Überblick.',
+          bigChoice('Ja, Struktur tut mir gut', 'Ich mag Routinen und den Überblick.',
             ctx.draft.likesStructure === true, () => { ctx.draft.likesStructure = true; ctx.refresh(); }),
-          bigChoice('🍃 Nein, das stresst mich eher', 'Halt es für mich schlicht — nur Werkzeuge, wenn ich sie brauche.',
+          bigChoice('Nein, das stresst mich eher', 'Halt es für mich schlicht — nur Werkzeuge, wenn ich sie brauche.',
             ctx.draft.likesStructure === false, () => { ctx.draft.likesStructure = false; ctx.refresh(); }),
         ]),
       ],
@@ -206,9 +210,12 @@ function chip(label, pressed, onToggle) {
 
 function multiChips(ctx, field, options) {
   return el('div', { class: 'chips', style: { marginTop: '6px' } },
-    options.map(o => chip(o.label, ctx.draft[field].includes(o.id),
+    options.map(o => chip(o.icon ? [iconSpan(o.icon), o.label] : o.label,
+      ctx.draft[field].includes(o.id),
       (on) => toggle(ctx.draft[field], o.id, on))));
 }
+
+function iconSpan(name) { return el('span', { class: 'icon', html: icon(name) }); }
 
 function triggerChips(ctx, type, items) {
   return el('div', { class: 'chips' },
@@ -291,6 +298,7 @@ export function describeAdaptation(draft) {
   const out = [];
   const needs = draft.needs;
   if (needs.includes('moment')) out.push('Die Notfall-Hilfe steht bei dir ganz vorn — im Ernstfall ein Fingertipp entfernt.');
+  if (needs.includes('develop')) out.push('„Mein Weg“ begleitet dich langfristig: jeden Tag ein kleiner Schritt, abgestimmt auf deine Situationen.');
   if (needs.includes('understand')) out.push('Ruhige Erklärungen und Übungen bekommen auf der Startseite Platz.');
   if (needs.includes('journal')) out.push('Dein Tagebuch für die Therapie ist gleich griffbereit.');
   if (!needs.length || needs.includes('unsure')) out.push('Ich halte alles offen und schlicht — du findest in deinem Tempo, was dir hilft.');

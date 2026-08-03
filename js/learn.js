@@ -1,6 +1,7 @@
 // "Verstehen" — kurze, validierende Psychoedukation.
 import { el } from './ui.js';
 import { LEARN } from './data.js';
+import { icon } from './icons.js';
 
 export async function renderLearn(app) {
   const view = el('div', { class: 'stack' });
@@ -9,7 +10,7 @@ export async function renderLearn(app) {
   );
   for (const c of LEARN) {
     view.append(el('div', { class: 'card' }, [
-      el('h3', { text: `${c.emoji}  ${c.title}` }),
+      el('h3', { class: 'h-icon' }, [el('span', { class: 'icon', html: icon(c.icon) }), c.title]),
       el('p', { class: 'lead', style: { margin: 0 }, text: c.body }),
     ]));
   }

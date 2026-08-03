@@ -1,6 +1,7 @@
 // "Hilfe holen" — respektvoller Verweis auf professionelle & Krisen-Hilfe.
 import { el } from './ui.js';
 import { CRISIS, DISCLAIMER } from './data.js';
+import { icon } from './icons.js';
 
 export async function renderHelp(app) {
   const view = el('div', { class: 'stack' });
@@ -13,7 +14,7 @@ export async function renderHelp(app) {
   view.append(el('div', { class: 'section-label', text: 'Jemanden erreichen' }));
   for (const c of CRISIS.contacts) {
     view.append(el('a', { class: 'tile', href: 'tel:' + c.tel, style: { textDecoration: 'none' } }, [
-      el('span', { class: 'emoji', html: '📞' }),
+      el('span', { class: 'emoji', html: icon('phone') }),
       el('span', { class: 't-body' }, [
         el('span', { class: 't-title', text: c.value }),
         el('span', { class: 't-sub', text: c.label }),

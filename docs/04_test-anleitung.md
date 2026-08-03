@@ -56,19 +56,27 @@ Im **Tagebuch** (unten rechts) kannst du in Sekunden festhalten:
 - in **welcher Situation**,
 - und **was geholfen** hat.
 
-Das ist **freiwillig** — es gibt keine Serie, kein schlechtes Gewissen, keine Erinnerungen, die dich nerven. Halte fest, wann und was du magst.
+Das ist **freiwillig** — es gibt keinen Streak, kein schlechtes Gewissen, keine Erinnerungen, die dich nerven. Halte fest, wann und was du magst.
 
-Oben siehst du deine **letzten 7 Tage** auf einen Blick. Und mit **„Für die Therapie"** kannst du deine Einträge mitnehmen — als übersichtliche Seite zum **Ausdrucken/als PDF** oder als **Textdatei**.
+Oben siehst du deine **letzten 7 Tage** auf einen Blick. Und mit dem **Datenexport** kannst du deine Einträge mitnehmen — z. B. für dein Therapiegespräch, als übersichtliche Seite zum **Ausdrucken/als PDF** oder als **Textdatei**.
 
 ---
 
-## 6. Sichere deine Daten (kurz, aber wichtig)
+## 6. Mein Weg — langfristig dranbleiben (wenn du magst)
+
+Unter **Mein Weg** (auf der Startseite) findest du jeden Tag **einen kleinen Schritt** (1–3 Minuten): mal eine ruhige Übung, mal eine kleine Vorbereitung — abgestimmt auf **deine** Situationen aus dem Kennenlernen. Jede Woche hat einen sanften Schwerpunkt.
+
+Wichtig: **Kein Streak, kein Druck.** Jeder Schritt zählt für sich, egal wann der letzte war. Wenn dir der heutige nicht passt, tippe auf „Ein anderer Schritt, bitte".
+
+---
+
+## 7. Sichere deine Daten (kurz, aber wichtig)
 
 Weil alles nur auf deinem Gerät liegt, gehen deine Einträge verloren, wenn du das Gerät wechselst oder den Browser-Speicher löschst. Deshalb: unter **Mehr (⋯) → „Sicherung exportieren"** ab und zu eine Sicherungsdatei speichern. Auf einem neuen Gerät kannst du sie mit **„Sicherung laden"** wieder einspielen.
 
 ---
 
-## 7. Alles ist änderbar
+## 8. Alles ist änderbar
 
 Über **Mehr (⋯)** oben rechts kannst du jederzeit:
 
@@ -81,7 +89,7 @@ Weil alles nur auf deinem Gerät liegt, gehen deine Einträge verloren, wenn du 
 
 ---
 
-## 8. Was diese App ist — und was nicht
+## 9. Was diese App ist — und was nicht
 
 MisoNIE ist ein **ruhiger Begleiter**. Sie nimmt dich ernst: Was du erlebst, ist real, und du musst dich dafür nicht rechtfertigen.
 

@@ -2,6 +2,7 @@
 // Kommunikations-Skripte und eine teilbare "Das-ist-Misophonie"-Karte.
 import { el, toast } from './ui.js';
 import { PREPARE, SCRIPTS, SITUATIONS } from './data.js';
+import { icon } from './icons.js';
 
 export async function renderPrepare(app) {
   const p = app.profile;
@@ -17,8 +18,11 @@ export async function renderPrepare(app) {
     if (!card) continue;
     const isOwn = own.includes(id);
     view.append(el('details', { class: 'card', open: isOwn && own.indexOf(id) === 0 ? true : null }, [
-      el('summary', { style: { cursor: 'pointer', fontWeight: '600', listStyle: 'none' } },
-        `${card.emoji}  ${card.title}` + (isOwn ? '   ·  für dich' : '')),
+      el('summary', { class: 'sum-icon', style: { cursor: 'pointer', fontWeight: '600', listStyle: 'none' } }, [
+        el('span', { class: 'icon', html: icon(card.icon) }),
+        el('span', { text: card.title }),
+        isOwn ? el('span', { class: 'faint small', text: ' · für dich' }) : null,
+      ]),
       el('ul', { style: { margin: '12px 0 0', paddingLeft: '20px', color: 'var(--muted)' } },
         card.tips.map(t => el('li', { text: t, style: { marginBottom: '8px' } }))),
     ]));

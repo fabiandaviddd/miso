@@ -6,6 +6,7 @@ import {
   SOS_TOOLS, GROUNDING, EXIT_LINES, REFRAME_LINES, KIND_LINES, TRIGGERS,
 } from './data.js';
 import { addEntry } from './store.js';
+import { icon } from './icons.js';
 
 export function openSOS(app, directToolId) {
   const overlay = el('div', { class: 'tool', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Hilfe im Moment' });
@@ -66,7 +67,7 @@ function showList(app, show) {
     );
     for (const t of tools) {
       wrap.append(el('button', { class: 'tile', onClick: () => open(t.id) }, [
-        el('span', { class: 'emoji', html: t.emoji }),
+        el('span', { class: 'emoji', html: icon(t.icon) }),
         el('span', { class: 't-body' }, [
           el('span', { class: 't-title', text: t.title }),
           el('span', { class: 't-sub', text: t.sub }),
@@ -177,7 +178,7 @@ const TOOLS = {
           el('li', { text: 'Jede Welle wird kleiner. Auch diese.' }),
         ]),
       ]),
-      el('button', { class: 'btn btn-ghost', onClick: () => { ctx.show(TOOLS.breathe); } }, '🫧 Mit dem Atem begleiten'),
+      el('button', { class: 'btn btn-ghost', onClick: () => { ctx.show(TOOLS.breathe); } }, [el('span', { class: 'icon', html: icon('breathe') }), ' Mit dem Atem begleiten']),
       doneRow(ctx),
     ]));
   },
@@ -216,7 +217,7 @@ function copyLine(text) {
 function doneRow(ctx) {
   return el('div', { style: { marginTop: '18px' } }, [
     el('div', { class: 'btn-row' }, [
-      el('button', { class: 'btn btn-ghost', onClick: () => quickCapture(ctx) }, '📔 Kurz festhalten'),
+      el('button', { class: 'btn btn-ghost', onClick: () => quickCapture(ctx) }, [el('span', { class: 'icon', html: icon('pencil') }), ' Kurz festhalten']),
       el('button', { class: 'btn btn-quiet', onClick: ctx.close }, 'Schließen'),
     ]),
   ]);
@@ -257,7 +258,7 @@ function quickCapture(ctx) {
         date: todayStr(), level: level || null,
         triggers: [...chosen], situation: null, helped: [], note: '',
       });
-      toast('Festgehalten 🤍');
+      toast('Festgehalten.');
       ctx.close();
     };
 

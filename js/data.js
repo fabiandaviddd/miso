@@ -1,5 +1,6 @@
 // Statische Inhalte der App. Auf Deutsch, ruhiger, validierender Ton.
 // Alles hier ist unterstützend gemeint — keine Diagnose, keine Behandlung.
+// Icons: Namen aus js/icons.js (selbst gezeichnete Linien-Icons, keine Emojis).
 
 // Trigger-Vorschläge, getrennt nach Sinn/Erleben. "Eigene" kommen frei dazu.
 export const TRIGGERS = {
@@ -25,16 +26,21 @@ export const TRIGGERS = {
   },
 };
 
-// Belastende Situationen (Onboarding + Vorbereiten).
+// Belastende Situationen (Onboarding, Tagebuch, Vorbereiten).
 export const SITUATIONS = [
-  { id: 'eating', emoji: '🍽️', label: 'Essen mit anderen' },
-  { id: 'work', emoji: '💻', label: 'Arbeit / Büro' },
-  { id: 'transit', emoji: '🚆', label: 'Bus & Bahn' },
-  { id: 'home', emoji: '🏠', label: 'Zu Hause / Familie' },
-  { id: 'video', emoji: '🎥', label: 'Videocalls' },
-  { id: 'study', emoji: '📚', label: 'Schule / Lernen' },
-  { id: 'cinema', emoji: '🍿', label: 'Kino / Veranstaltung' },
-  { id: 'sleep', emoji: '🌙', label: 'Einschlafen' },
+  { id: 'eating', icon: 'utensils', label: 'Essen mit anderen' },
+  { id: 'work', icon: 'laptop', label: 'Büro / Arbeit' },
+  { id: 'transit', icon: 'train', label: 'Bus & Bahn' },
+  { id: 'home', icon: 'home', label: 'Zu Hause / Familie' },
+  { id: 'video', icon: 'video', label: 'Videocalls' },
+  { id: 'study', icon: 'cap', label: 'Schule / Lernen' },
+  { id: 'crowd', icon: 'users', label: 'Menschenmengen' },
+  { id: 'event', icon: 'sparkles', label: 'Feiern & Events' },
+  { id: 'festival', icon: 'tent', label: 'Outdoor-Festival' },
+  { id: 'restaurant', icon: 'coffee', label: 'Restaurant / Café' },
+  { id: 'cinema', icon: 'film', label: 'Kino / Theater' },
+  { id: 'shopping', icon: 'bag', label: 'Einkaufen' },
+  { id: 'sleep', icon: 'moon', label: 'Einschlafen' },
 ];
 
 // Was jetzt schon hilft (Onboarding) -> bestückt die Notfall-Hilfe.
@@ -49,13 +55,13 @@ export const HELPS = [
 
 // Sofort-Werkzeuge im Trigger-Moment. `id` verweist auf sos.js.
 export const SOS_TOOLS = [
-  { id: 'breathe', emoji: '🫧', title: 'Atem-Anker', sub: 'Langsamer atmen, Schritt für Schritt', suggestFrom: ['breathe'] },
-  { id: 'leave', emoji: '🚪', title: 'Raus hier', sub: 'Rausgehen ist erlaubt — mit fertigen Sätzen', suggestFrom: ['leave'] },
-  { id: 'ground', emoji: '🌿', title: 'Ankommen (5-4-3-2-1)', sub: 'Aus dem Kopf, zurück in den Moment', suggestFrom: ['distract'] },
-  { id: 'mask', emoji: '🎧', title: 'Ruhe-Klang', sub: 'Ein weiches Geräusch drüberlegen', suggestFrom: ['mask'], needsSound: true },
-  { id: 'surf', emoji: '🌊', title: 'Die Welle reiten', sub: 'Die Wut steigt — und ebbt wieder ab', suggestFrom: [] },
-  { id: 'reframe', emoji: '🧭', title: 'Umdeuten', sub: 'Es ist nicht gegen dich gerichtet', suggestFrom: ['reframe'] },
-  { id: 'kind', emoji: '🤍', title: 'Freundlich zu dir', sub: 'Du reagierst nicht falsch', suggestFrom: [] },
+  { id: 'breathe', icon: 'breathe', title: 'Atem-Anker', sub: 'Langsamer atmen, Schritt für Schritt', suggestFrom: ['breathe'] },
+  { id: 'leave', icon: 'door', title: 'Raus hier', sub: 'Rausgehen ist erlaubt — mit fertigen Sätzen', suggestFrom: ['leave'] },
+  { id: 'ground', icon: 'leaf', title: 'Ankommen (5-4-3-2-1)', sub: 'Aus dem Kopf, zurück in den Moment', suggestFrom: ['distract'] },
+  { id: 'mask', icon: 'headphones', title: 'Ruhe-Klang', sub: 'Ein weiches Geräusch drüberlegen', suggestFrom: ['mask'], needsSound: true },
+  { id: 'surf', icon: 'wave', title: 'Die Welle reiten', sub: 'Die Wut steigt — und ebbt wieder ab', suggestFrom: [] },
+  { id: 'reframe', icon: 'compass', title: 'Umdeuten', sub: 'Es ist nicht gegen dich gerichtet', suggestFrom: ['reframe'] },
+  { id: 'kind', icon: 'heart', title: 'Freundlich zu dir', sub: 'Du reagierst nicht falsch', suggestFrom: [] },
 ];
 
 // Grounding-Schritte (5-4-3-2-1).
@@ -94,31 +100,31 @@ export const KIND_LINES = [
 // Psychoedukation — kurze, validierende Karten ("Verstehen").
 export const LEARN = [
   {
-    emoji: '💚', title: 'Es ist real — und es hat einen Namen',
+    icon: 'heart', title: 'Es ist real — und es hat einen Namen',
     body: 'Misophonie bedeutet: Bestimmte Geräusche (oder ihr Anblick) lösen bei dir starke, unwillkürliche Reaktionen aus — Wut, Ekel, Anspannung, den Drang zu fliehen. Das ist keine Überempfindlichkeit „aus Prinzip“ und kein Charakterfehler. Du bist damit nicht allein.',
   },
   {
-    emoji: '🔊', title: 'Es geht nicht um Lautstärke',
+    icon: 'volume', title: 'Es geht nicht um Lautstärke',
     body: 'Anders als bei Lärmempfindlichkeit ist nicht entscheidend, wie laut etwas ist, sondern welches Geräusch es ist und was es bedeutet. Ein leises Kauen kann heftiger treffen als eine laute Baustelle. Deshalb hilft „einfach leiser“ oft nicht — und das ist nicht deine Schuld.',
   },
   {
-    emoji: '🧠', title: 'Warum der Körper Alarm schlägt',
+    icon: 'activity', title: 'Warum der Körper Alarm schlägt',
     body: 'Bei Misophonie reagiert ein Netzwerk im Gehirn, das Reizen Bedeutung und Dringlichkeit gibt, auf Trigger besonders stark — mit einer echten Stressreaktion (Herzschlag, Anspannung). Das läuft schneller ab, als du denken kannst. Du „entscheidest“ dich nicht dafür.',
   },
   {
-    emoji: '👀', title: 'Auch Sehen kann auslösen',
+    icon: 'eye', title: 'Auch Sehen kann auslösen',
     body: 'Manche Menschen reagieren auch auf den Anblick von Bewegungen — jemanden kauen sehen, Wippen, Zappeln. Das nennt man Misokinesie. Oft reicht schon das Wissen, dass ein Geräusch kommen könnte. Auch das ist ein bekanntes, echtes Phänomen.',
   },
   {
-    emoji: '👥', title: 'Warum es bei nahen Menschen oft schlimmer ist',
+    icon: 'users', title: 'Warum es bei nahen Menschen oft schlimmer ist',
     body: 'Dass ausgerechnet Familie oder Partner:in am stärksten triggern, ist typisch — nicht, weil du sie weniger magst. Es liegt an Nähe, Wiederholung und daran, dass man ihnen schlecht ausweichen kann. Das über ein „du müsstest es doch besser wissen“ zu erklären, macht es unnötig schwer.',
   },
   {
-    emoji: '🌱', title: 'Was realistisch hilft',
+    icon: 'sprout', title: 'Was realistisch hilft',
     body: 'Es gibt keine Wunderlösung und keine „Heilung auf Knopfdruck“. Aber vieles lässt sich lindern: die Reaktion abfedern, sich erlauben rauszugehen, Situationen vorbereiten, freundlicher mit sich sein. Was hier drin steckt, sind solche Werkzeuge — kein Training, das dich Geräuschen aussetzt.',
   },
   {
-    emoji: '🚫', title: 'Warum wir dich Geräuschen nicht „aussetzen“',
+    icon: 'ban', title: 'Warum wir dich Geräuschen nicht „aussetzen“',
     body: 'Bei Angst hilft es oft, sich dem Gefürchteten zu stellen, bis es abklingt. Bei Misophonie ist das anders: Sich Triggern gezielt auszusetzen, hilft meist nicht — und kann es schlimmer machen. Deshalb spielt diese App bewusst keine Trigger-Geräusche ab. Nur du entscheidest, welchen Klang du hörst.',
   },
 ];
@@ -126,7 +132,7 @@ export const LEARN = [
 // Situations-Karten ("Vorbereiten"): konkrete, würdevolle Strategien.
 export const PREPARE = {
   eating: {
-    emoji: '🍽️', title: 'Essen mit anderen',
+    icon: 'utensils', title: 'Essen mit anderen',
     tips: [
       'Setz dich, wenn möglich, so, dass du Trigger nicht direkt vor dir hast — Kopf-Ende, Ecke, neben statt gegenüber.',
       'Ein Hintergrundgeräusch (Musik, Radio, Ventilator) darf laufen. Das ist kein Zeichen von Schwäche.',
@@ -135,7 +141,7 @@ export const PREPARE = {
     ],
   },
   work: {
-    emoji: '💻', title: 'Arbeit / Büro',
+    icon: 'laptop', title: 'Büro / Arbeit',
     tips: [
       'Kopfhörer sind ein legitimes Arbeitsmittel, kein Rückzug. Du darfst sie tragen.',
       'Wenn möglich: ruhigerer Platz, weiter weg von Küche/Essbereich, oder feste Fokus-Zeiten.',
@@ -144,7 +150,7 @@ export const PREPARE = {
     ],
   },
   transit: {
-    emoji: '🚆', title: 'Bus & Bahn',
+    icon: 'train', title: 'Bus & Bahn',
     tips: [
       'Halte Kopfhörer und einen ruhigen Klang griffbereit, bevor du einsteigst.',
       'Du darfst den Platz wechseln — so oft du willst. Du schuldest niemandem eine Erklärung.',
@@ -152,7 +158,7 @@ export const PREPARE = {
     ],
   },
   home: {
-    emoji: '🏠', title: 'Zu Hause / Familie',
+    icon: 'home', title: 'Zu Hause / Familie',
     tips: [
       'Sprich in einem ruhigen Moment darüber — nicht mitten im Trigger.',
       'Ich-Botschaften helfen: „Mir tut es gut, wenn …“ statt „Du machst immer …“.',
@@ -161,7 +167,7 @@ export const PREPARE = {
     ],
   },
   video: {
-    emoji: '🎥', title: 'Videocalls',
+    icon: 'video', title: 'Videocalls',
     tips: [
       'Nutze Untertitel/Transkript, wenn möglich — dann kannst du stummschalten und trotzdem folgen.',
       'Eigenes Mikro stummschalten, fremde Kacheln bei Bedarf ausblenden (auch gegen visuelle Trigger).',
@@ -169,22 +175,67 @@ export const PREPARE = {
     ],
   },
   study: {
-    emoji: '📚', title: 'Schule / Lernen',
+    icon: 'cap', title: 'Schule / Lernen',
     tips: [
       'Ein ruhiger Klang oder Ohrstöpsel beim Lernen sind Konzentrationshilfen.',
       'Bei Prüfungen: frag nach einem ruhigeren Platz — das ist eine faire Bitte.',
       'Plane Pausen fest ein, bevor die Anspannung zu groß wird.',
     ],
   },
+  crowd: {
+    icon: 'users', title: 'Menschenmengen',
+    tips: [
+      'Ränder statt Mitte: Am Rand einer Menge hast du Luft und einen Weg nach draußen.',
+      'Ohrstöpsel, die dämpfen ohne abzuschotten, sind hier Gold wert.',
+      'Plane vorher, wo du kurz auftanken kannst — eine ruhige Ecke, draußen, die Toilette.',
+      'Du musst nicht durchhalten, bis es „vorbei“ ist. Gehen dürfen entspannt — oft so sehr, dass Bleiben leichter wird.',
+    ],
+  },
+  event: {
+    icon: 'sparkles', title: 'Feiern & Events',
+    tips: [
+      'Komm früh — dann kannst du dir deinen Platz aussuchen (Rand, Nähe zur Tür).',
+      'Eine eingeweihte Person als Verbündete macht vieles leichter: Sie versteht, wenn du kurz verschwindest.',
+      'Pausen sind normal. Niemand zählt, wie lange du am Tisch sitzt.',
+      'Früher gehen ist völlig okay. Ein schöner kurzer Abend zählt mehr als ein durchgestandener langer.',
+    ],
+  },
+  festival: {
+    icon: 'tent', title: 'Outdoor-Festival',
+    tips: [
+      'Gehörschutz gehört auf Festivals sowieso dazu — du fällst damit nicht auf, du bist schlau.',
+      'Such dir früh Rückzugsorte: das eigene Zelt, ruhigere Bereiche, der Rand des Geländes.',
+      'Verabrede ein einfaches Zeichen mit deinen Leuten für „ich brauch kurz Pause“.',
+      'Plane Erholungsfenster ein (z. B. nachmittags), statt von früh bis nachts durchzuziehen.',
+    ],
+  },
+  restaurant: {
+    icon: 'coffee', title: 'Restaurant / Café',
+    tips: [
+      'Platzwahl ist die halbe Miete: Wand im Rücken, Ecke, nicht mitten im Raum.',
+      'Orte mit Hintergrundmusik oder Betriebsgeräusch sind oft leichter als stille Cafés.',
+      'Selbst essen und trinken maskiert — bestell dir ruhig zuerst etwas.',
+      'Draußen sitzen ist oft angenehmer: mehr Raum, mehr Umgebungsgeräusche.',
+    ],
+  },
   cinema: {
-    emoji: '🍿', title: 'Kino / Veranstaltung',
+    icon: 'film', title: 'Kino / Theater',
     tips: [
       'Randplatz oder Gang-Nähe geben dir einen Fluchtweg, falls nötig.',
-      'Es ist völlig in Ordnung, vorher zu klären, ob du zwischendurch kurz rausgehen kannst.',
+      'Vorstellungen zu Randzeiten sind leerer — weniger Menschen, weniger Trigger.',
+      'Es ist völlig in Ordnung, zwischendurch kurz rauszugehen.',
+    ],
+  },
+  shopping: {
+    icon: 'bag', title: 'Einkaufen',
+    tips: [
+      'Ruhige Uhrzeiten nutzen (früh morgens, spät abends) — weniger Menschen, weniger Geräusche.',
+      'Mit Einkaufszettel bist du schneller wieder draußen.',
+      'Kopfhörer oder Ohrstöpsel beim Einkaufen sind völlig legitim.',
     ],
   },
   sleep: {
-    emoji: '🌙', title: 'Einschlafen',
+    icon: 'moon', title: 'Einschlafen',
     tips: [
       'Ein gleichmäßiger Klang (Rauschen, Ventilator) kann Trigger überdecken.',
       'Getrennte Decken oder etwas Abstand nehmen niemandem etwas weg — sie schützen deinen Schlaf.',
@@ -222,7 +273,7 @@ export const CRISIS = {
     { label: 'Telefonseelsorge (zweite Nummer)', value: '0800 111 0 222', tel: '08001110222' },
     { label: 'In akuter Gefahr: Notruf', value: '112', tel: '112' },
   ],
-  note: 'Für Misophonie selbst können Ärzt:innen, Psychotherapeut:innen oder HNO/Audiolog:innen erste Ansprechpartner sein. Dieses Tagebuch darfst du gern mitnehmen.',
+  note: 'Für Misophonie selbst können Ärzt:innen, Psychotherapeut:innen oder HNO/Audiolog:innen erste Ansprechpartner sein. Deinen Datenexport aus dem Tagebuch darfst du gern mitnehmen.',
 };
 
 export const DISCLAIMER = 'MisoNIE unterstützt dich — es stellt keine Diagnose und ist keine Behandlung oder Therapie. Bei anhaltender oder starker Belastung wende dich bitte an professionelle Hilfe.';

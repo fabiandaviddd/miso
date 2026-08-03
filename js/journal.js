@@ -4,8 +4,9 @@
 import { el, mount, clear, toast, esc, buzz } from './ui.js';
 import { getEntries, addEntry, updateEntry, deleteEntry } from './store.js';
 import { SITUATIONS, DISCLAIMER } from './data.js';
+import { icon } from './icons.js';
 
-const HELPED = ['Rausgegangen', 'Kopfhörer / Klang', 'Geatmet', 'Abgelenkt', 'Umgedeutet', 'Freundlich zu mir', 'Nichts geholfen'];
+const HELPED = ['Rausgegangen', 'Kopfhörer / Klang', 'Weggeschaut', 'Geatmet', 'Abgelenkt', 'Umgedeutet', 'Angesprochen', 'Mit jemandem geredet', 'Freundlich zu mir', 'Nichts geholfen'];
 const LVL_VARS = { 1: '--lvl-1', 2: '--lvl-2', 3: '--lvl-3', 4: '--lvl-4', 5: '--lvl-5' };
 
 export async function renderJournal(app) {
@@ -40,11 +41,11 @@ async function build(app, state, repaint) {
   // --- Export ---
   if (entries.length) {
     nodes.push(el('div', { class: 'card' }, [
-      el('h3', { text: '📤 Für die Therapie' }),
-      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Nimm deine Einträge mit — als übersichtliche Seite zum Ausdrucken/als PDF oder als Textdatei.' }),
+      el('h3', { class: 'h-icon' }, [el('span', { class: 'icon', html: icon('download') }), 'Datenexport']),
+      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Nimm deine Einträge mit — z. B. für dein Therapiegespräch. Als übersichtliche Seite zum Ausdrucken/als PDF oder als Textdatei.' }),
       el('div', { class: 'btn-row' }, [
-        el('button', { class: 'btn btn-ghost', onClick: () => exportPrintable(entries, p) }, 'Drucken / PDF'),
-        el('button', { class: 'btn btn-ghost', onClick: () => downloadText(entries, p) }, 'Textdatei'),
+        el('button', { class: 'btn btn-ghost', onClick: () => exportPrintable(entries, p) }, [el('span', { class: 'icon', html: icon('printer') }), ' Drucken / PDF']),
+        el('button', { class: 'btn btn-ghost', onClick: () => downloadText(entries, p) }, [el('span', { class: 'icon', html: icon('doc') }), ' Textdatei']),
       ]),
     ]));
   }
@@ -53,7 +54,7 @@ async function build(app, state, repaint) {
   nodes.push(el('div', { class: 'section-label', text: entries.length ? 'Einträge' : '' }));
   if (!entries.length) {
     nodes.push(el('div', { class: 'empty' }, [
-      el('div', { class: 'big', html: '📔' }),
+      el('div', { class: 'big', html: icon('book') }),
       el('p', { text: 'Noch keine Einträge. Ganz ohne Druck — halte fest, wann und was du magst.' }),
     ]));
   } else {
@@ -102,8 +103,8 @@ function entryForm(app, state, repaint) {
 
   // Situation
   const sit = el('select', {}, [
-    el('option', { value: '', text: '— Situation (optional) —' }),
-    ...SITUATIONS.map(s => el('option', { value: s.id, text: `${s.emoji} ${s.label}`, selected: d.situation === s.id ? true : null })),
+    el('option', { value: '', text: '— Situation wählen (optional) —' }),
+    ...SITUATIONS.map(s => el('option', { value: s.id, text: s.label, selected: d.situation === s.id ? true : null })),
   ]);
   sit.addEventListener('change', () => { d.situation = sit.value; });
 
@@ -125,7 +126,7 @@ function entryForm(app, state, repaint) {
       toast('Aktualisiert');
     } else {
       await addEntry(Object.assign({}, d));
-      toast('Gespeichert 🤍');
+      toast('Gespeichert.');
     }
     state.draft = emptyDraft(app);
     await repaint();
@@ -139,7 +140,7 @@ function entryForm(app, state, repaint) {
     el('div', { class: 'section-label', text: 'Auslöser' }),
     triggerChips,
     el('div', { class: 'btn-row', style: { gap: '10px', marginTop: '8px' } }, [trgInput, el('button', { class: 'btn btn-ghost auto', text: '+', onClick: addTrg })]),
-    el('div', { class: 'section-label', text: 'Kontext' }),
+    el('div', { class: 'section-label', text: 'Situation' }),
     sit,
     el('div', { class: 'section-label', text: 'Was hat geholfen?' }),
     helpedChips,

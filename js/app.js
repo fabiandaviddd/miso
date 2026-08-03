@@ -8,6 +8,8 @@ import { renderLearn } from './learn.js';
 import { renderPrepare } from './prepare.js';
 import { renderSettings } from './settings.js';
 import { renderHelp } from './help.js';
+import { renderPath } from './path.js';
+import { icon } from './icons.js';
 import { openSOS } from './sos.js';
 
 const root = document.getElementById('app');
@@ -26,6 +28,7 @@ const app = {
 const ROUTES = {
   start:       { view: renderHome,     title: 'MisoNIE', primary: true },
   tagebuch:    { view: renderJournal,  title: 'Tagebuch', primary: true },
+  weg:         { view: renderPath,     title: 'Mein Weg', back: 'start' },
   verstehen:   { view: renderLearn,    title: 'Verstehen', back: 'start' },
   vorbereiten: { view: renderPrepare,  title: 'Vorbereiten', back: 'start' },
   mehr:        { view: renderSettings, title: 'Mehr', back: 'start' },
@@ -73,24 +76,24 @@ function renderShell(key, def, content) {
 }
 
 function buildTabbar(key) {
-  const tab = (routeKey, icon, label, current) =>
+  const tab = (routeKey, iconName, label, current) =>
     el('button', {
-      class: 'tab' + (current ? '' : ''),
+      class: 'tab',
       'aria-current': current ? 'page' : null,
       onClick: () => navigate(routeKey),
-    }, [el('span', { class: 'ti', html: icon }), el('span', { text: label })]);
+    }, [el('span', { class: 'ti', html: icon(iconName) }), el('span', { text: label })]);
 
   const sos = el('button', {
     class: 'tab tab-sos',
     'aria-label': 'Jetzt Hilfe im Moment',
     onClick: () => app.openSOS(),
-  }, [el('span', { class: 'ti', html: '🆘' }), el('span', { text: 'Jetzt Hilfe' })]);
+  }, [el('span', { class: 'ti', html: icon('rings') }), el('span', { text: 'Jetzt Hilfe' })]);
 
   return el('nav', { class: 'tabbar', 'aria-label': 'Hauptnavigation' }, [
     el('div', { class: 'tabbar-inner' }, [
-      tab('start', '🏠', 'Start', key === 'start'),
+      tab('start', 'home', 'Start', key === 'start'),
       sos,
-      tab('tagebuch', '📔', 'Tagebuch', key === 'tagebuch'),
+      tab('tagebuch', 'book', 'Tagebuch', key === 'tagebuch'),
     ]),
   ]);
 }
