@@ -30,7 +30,7 @@ export async function renderHelp(app) {
     el('ul', { style: { margin: 0, paddingLeft: '20px', color: 'var(--muted)' } }, [
       el('li', { text: 'Wenn Misophonie deinen Alltag stark einschränkt (Essen, Arbeit, Schule, Kontakte).' }),
       el('li', { text: 'Wenn du dich zunehmend zurückziehst oder niedergeschlagen fühlst.' }),
-      el('li', { text: 'Wenn dunkle Gedanken auftauchen — dann bitte sofort eine der Nummern oben.' }),
+      el('li', { text: 'Wenn dunkle Gedanken auftauchen: dann bitte sofort eine der Nummern oben.' }),
     ]),
     el('p', { class: 'muted', style: { marginTop: '10px', marginBottom: 0 }, text: 'Um Hilfe zu bitten ist ein Zeichen von Stärke, nicht von Schwäche.' }),
   ]));

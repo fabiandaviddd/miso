@@ -43,7 +43,7 @@ export const SITUATIONS = [
   { id: 'sleep', icon: 'moon', label: 'Einschlafen' },
 ];
 
-// Was jetzt schon hilft (Onboarding) -> bestückt die Notfall-Hilfe.
+// Was jetzt schon hilft (Onboarding) -> bestückt die Notfallhilfe.
 export const HELPS = [
   { id: 'leave', label: 'Kurz rausgehen' },
   { id: 'mask', label: 'Kopfhörer / Geräusch drüberlegen' },
@@ -53,13 +53,13 @@ export const HELPS = [
   { id: 'none', label: 'Noch nichts gefunden' },
 ];
 
-// Sofort-Werkzeuge im Trigger-Moment. `id` verweist auf sos.js.
+// Sofort-Werkzeuge im Triggermoment. `id` verweist auf sos.js.
 export const SOS_TOOLS = [
-  { id: 'breathe', icon: 'breathe', title: 'Atem-Anker', sub: 'Langsamer atmen, Schritt für Schritt', suggestFrom: ['breathe'] },
-  { id: 'leave', icon: 'door', title: 'Raus hier', sub: 'Rausgehen ist erlaubt — mit fertigen Sätzen', suggestFrom: ['leave'] },
+  { id: 'breathe', icon: 'breathe', title: 'Atemanker', sub: 'Langsamer atmen, Schritt für Schritt', suggestFrom: ['breathe'] },
+  { id: 'leave', icon: 'door', title: 'Raus hier', sub: 'Rausgehen ist erlaubt, mit fertigen Sätzen', suggestFrom: ['leave'] },
   { id: 'ground', icon: 'leaf', title: 'Ankommen (5-4-3-2-1)', sub: 'Aus dem Kopf, zurück in den Moment', suggestFrom: ['distract'] },
-  { id: 'mask', icon: 'headphones', title: 'Ruhe-Klang', sub: 'Ein weiches Geräusch drüberlegen', suggestFrom: ['mask'], needsSound: true },
-  { id: 'surf', icon: 'wave', title: 'Die Welle reiten', sub: 'Die Wut steigt — und ebbt wieder ab', suggestFrom: [] },
+  { id: 'mask', icon: 'headphones', title: 'Ruheklang', sub: 'Ein weiches Geräusch drüberlegen', suggestFrom: ['mask'], needsSound: true },
+  { id: 'surf', icon: 'wave', title: 'Die Welle reiten', sub: 'Die Wut steigt und ebbt wieder ab', suggestFrom: [] },
   { id: 'reframe', icon: 'compass', title: 'Umdeuten', sub: 'Es ist nicht gegen dich gerichtet', suggestFrom: ['reframe'] },
   { id: 'kind', icon: 'heart', title: 'Freundlich zu dir', sub: 'Du reagierst nicht falsch', suggestFrom: [] },
 ];
@@ -67,9 +67,9 @@ export const SOS_TOOLS = [
 // Grounding-Schritte (5-4-3-2-1).
 export const GROUNDING = [
   { n: 5, sense: 'sehen', prompt: 'Nenne dir 5 Dinge, die du gerade sehen kannst.' },
-  { n: 4, sense: 'fühlen', prompt: 'Nenne 4 Dinge, die du spüren kannst — der Boden, dein Atem, der Stoff.' },
+  { n: 4, sense: 'fühlen', prompt: 'Nenne 4 Dinge, die du spüren kannst: der Boden, dein Atem, der Stoff.' },
   { n: 3, sense: 'hören', prompt: 'Nenne 3 Geräusche, die einfach da sind. Ohne sie zu bewerten.' },
-  { n: 2, sense: 'riechen', prompt: 'Nenne 2 Dinge, die du riechen kannst — oder gern riechen würdest.' },
+  { n: 2, sense: 'riechen', prompt: 'Nenne 2 Dinge, die du riechen kannst oder gern riechen würdest.' },
   { n: 1, sense: 'schmecken', prompt: 'Nenne 1 Sache, die du schmecken kannst.' },
 ];
 
@@ -85,14 +85,14 @@ export const EXIT_LINES = [
 export const REFRAME_LINES = [
   'Das Geräusch ist nicht gegen dich gerichtet.',
   'Dein Körper schlägt Alarm, obwohl keine Gefahr da ist. Das darf sein.',
-  'Diese Reaktion ist körperlich — kein Fehler in dir.',
+  'Diese Reaktion ist körperlich. Sie ist kein Fehler in dir.',
   'Du musst das Geräusch nicht mögen. Du darfst es nur da sein lassen.',
 ];
 
 // Freundlich zu dir: Selbstmitgefühl.
 export const KIND_LINES = [
   'Was du erlebst, ist real. Du stellst dich nicht an.',
-  'Du reagierst nicht falsch — du reagierst stark auf etwas Echtes.',
+  'Du reagierst nicht falsch. Du reagierst stark auf etwas Echtes.',
   'Andere spüren das nicht so. Das macht dich nicht schwierig.',
   'Du gibst gerade dein Bestes. Das reicht.',
 ];
@@ -100,32 +100,91 @@ export const KIND_LINES = [
 // Psychoedukation — kurze, validierende Karten ("Verstehen").
 export const LEARN = [
   {
-    icon: 'heart', title: 'Es ist real — und es hat einen Namen',
-    body: 'Misophonie bedeutet: Bestimmte Geräusche (oder ihr Anblick) lösen bei dir starke, unwillkürliche Reaktionen aus — Wut, Ekel, Anspannung, den Drang zu fliehen. Das ist keine Überempfindlichkeit „aus Prinzip“ und kein Charakterfehler. Du bist damit nicht allein.',
+    icon: 'heart', title: 'Es ist real und es hat einen Namen',
+    body: 'Misophonie bedeutet: Bestimmte Geräusche (oder ihr Anblick) lösen bei dir starke, unwillkürliche Reaktionen aus: Wut, Ekel, Anspannung, den Drang zu fliehen. Das ist keine Überempfindlichkeit „aus Prinzip“ und kein Charakterfehler. Du bist damit nicht allein.',
   },
   {
     icon: 'volume', title: 'Es geht nicht um Lautstärke',
-    body: 'Anders als bei Lärmempfindlichkeit ist nicht entscheidend, wie laut etwas ist, sondern welches Geräusch es ist und was es bedeutet. Ein leises Kauen kann heftiger treffen als eine laute Baustelle. Deshalb hilft „einfach leiser“ oft nicht — und das ist nicht deine Schuld.',
+    body: 'Anders als bei Lärmempfindlichkeit ist nicht entscheidend, wie laut etwas ist, sondern welches Geräusch es ist und was es bedeutet. Ein leises Kauen kann heftiger treffen als eine laute Baustelle. Deshalb hilft „einfach leiser“ oft nicht. Das ist nicht deine Schuld.',
   },
   {
     icon: 'activity', title: 'Warum der Körper Alarm schlägt',
-    body: 'Bei Misophonie reagiert ein Netzwerk im Gehirn, das Reizen Bedeutung und Dringlichkeit gibt, auf Trigger besonders stark — mit einer echten Stressreaktion (Herzschlag, Anspannung). Das läuft schneller ab, als du denken kannst. Du „entscheidest“ dich nicht dafür.',
+    body: 'Bei Misophonie reagiert ein Netzwerk im Gehirn, das Reizen Bedeutung und Dringlichkeit gibt, auf Trigger besonders stark. Die Folge ist eine echte Stressreaktion: schnellerer Herzschlag, Anspannung. Das läuft schneller ab, als du denken kannst. Du „entscheidest“ dich nicht dafür.',
+  },
+  {
+    icon: 'volume', title: 'Wie eine Sirene, die nur du hörst',
+    body: 'Alle Menschen sind auf bestimmte Geräusche trainiert: Bei einer Sirene wird jeder sofort wach, aufmerksam, angespannt. Niemand käme auf die Idee, das eine Überreaktion zu nennen. Bei Misophonie hat dein Gehirn Geräuschen wie Kauen oder Schniefen genau diesen Sirenenstatus gegeben. Dein Alarm ist echt. Er geht nur bei Geräuschen los, die für andere harmlos sind.',
   },
   {
     icon: 'eye', title: 'Auch Sehen kann auslösen',
-    body: 'Manche Menschen reagieren auch auf den Anblick von Bewegungen — jemanden kauen sehen, Wippen, Zappeln. Das nennt man Misokinesie. Oft reicht schon das Wissen, dass ein Geräusch kommen könnte. Auch das ist ein bekanntes, echtes Phänomen.',
+    body: 'Manche Menschen reagieren auch auf den Anblick von Bewegungen: jemanden kauen sehen, Wippen, Zappeln. Das nennt man Misokinesie. Oft reicht schon das Wissen, dass ein Geräusch kommen könnte. Auch das ist ein bekanntes, echtes Phänomen.',
   },
   {
     icon: 'users', title: 'Warum es bei nahen Menschen oft schlimmer ist',
-    body: 'Dass ausgerechnet Familie oder Partner:in am stärksten triggern, ist typisch — nicht, weil du sie weniger magst. Es liegt an Nähe, Wiederholung und daran, dass man ihnen schlecht ausweichen kann. Das über ein „du müsstest es doch besser wissen“ zu erklären, macht es unnötig schwer.',
+    body: 'Dass ausgerechnet Familie oder Partner:in am stärksten triggern, ist typisch und heißt nicht, dass du sie weniger magst. Es liegt an Nähe, Wiederholung und daran, dass man ihnen schlecht ausweichen kann. Das über ein „du müsstest es doch besser wissen“ zu erklären, macht es unnötig schwer.',
   },
   {
     icon: 'sprout', title: 'Was realistisch hilft',
-    body: 'Es gibt keine Wunderlösung und keine „Heilung auf Knopfdruck“. Aber vieles lässt sich lindern: die Reaktion abfedern, sich erlauben rauszugehen, Situationen vorbereiten, freundlicher mit sich sein. Was hier drin steckt, sind solche Werkzeuge — kein Training, das dich Geräuschen aussetzt.',
+    body: 'Es gibt keine Wunderlösung und keine „Heilung auf Knopfdruck“. Aber vieles lässt sich lindern: die Reaktion abfedern, sich erlauben rauszugehen, Situationen vorbereiten, freundlicher mit sich sein. Was hier drin steckt, sind solche Werkzeuge, kein Training, das dich Geräuschen aussetzt.',
   },
   {
     icon: 'ban', title: 'Warum wir dich Geräuschen nicht „aussetzen“',
-    body: 'Bei Angst hilft es oft, sich dem Gefürchteten zu stellen, bis es abklingt. Bei Misophonie ist das anders: Sich Triggern gezielt auszusetzen, hilft meist nicht — und kann es schlimmer machen. Deshalb spielt diese App bewusst keine Trigger-Geräusche ab. Nur du entscheidest, welchen Klang du hörst.',
+    body: 'Bei Angst hilft es oft, sich dem Gefürchteten zu stellen, bis es abklingt. Bei Misophonie ist das anders: Sich Triggern gezielt auszusetzen, hilft meist nicht und kann es sogar schlimmer machen. Deshalb spielt diese App bewusst keine Triggergeräusche ab. Nur du entscheidest, welchen Klang du hörst.',
+  },
+];
+
+// "Aus der Forschung": kuratierte Funde, monatlich rotierend ("News of the month").
+// Ehrlich formuliert, mit Quelle. Kein Ersatz für aktuelle Literatur.
+export const RESEARCH = [
+  {
+    title: 'Misophonie ist offiziell definiert',
+    body: 'Ein internationales Expertengremium hat sich 2022 auf eine Definition geeinigt: Misophonie ist eine eigenständige Störung verminderter Toleranz gegenüber bestimmten Geräuschen, mit starken emotionalen und körperlichen Reaktionen. Das klingt trocken, bedeutet aber: Die Wissenschaft nimmt ernst, was du erlebst.',
+    source: 'Swedo et al. 2022, Frontiers in Neuroscience (Konsensus-Definition)',
+  },
+  {
+    title: 'Deine Reaktion ist messbar',
+    body: 'Bei Betroffenen reagiert die vordere Inselrinde, eine Art Wichtigkeitszentrale des Gehirns, deutlich stärker auf Triggergeräusche. Gleichzeitig steigen Herzfrequenz und Hautleitwert. Die Reaktion ist also körperlich nachweisbar und keine Einbildung.',
+    source: 'Kumar et al. 2017, Current Biology',
+  },
+  {
+    title: 'Therapie ohne Konfrontation wirkt',
+    body: 'Die bisher größte Studie zu Verhaltenstherapie bei Misophonie arbeitete bewusst ohne Konfrontation mit Triggern und zeigte deutliche Besserung bei gut einem Drittel der Teilnehmenden. Der Effekt hielt über ein Jahr an. Wichtig: Es ging um Umgang und Bewertung, nicht ums Aushalten.',
+    source: 'Jager et al. 2021, Depression and Anxiety (randomisierte Studie, Amsterdam)',
+  },
+  {
+    title: 'Essgeräusche sind der häufigste Auslöser',
+    body: 'In einer großen Befragung nannten rund 81 Prozent der Betroffenen Ess- und Kaugeräusche als Trigger, gefolgt von Atem- und Nasengeräuschen. Zugleich gilt: Jedes Trigger-Profil ist individuell. Praktisch jedes Geräusch kann diese Rolle übernehmen.',
+    source: 'Rouw und Erfanian 2018, Journal of Clinical Psychology',
+  },
+  {
+    title: 'Auch Sehen kann triggern',
+    body: 'Etwa jeder dritte Mensch kennt in irgendeiner Form Unbehagen beim Anblick kleiner, wiederholter Bewegungen wie Zappeln oder Wippen. Das Phänomen heißt Misokinesie und tritt oft zusammen mit Misophonie auf. Wenn dich also auch der Anblick von Kaugummikauen trifft: bekannt und real.',
+    source: 'Jaswal et al. 2021, Scientific Reports',
+  },
+  {
+    title: 'Das Gehirn spiegelt mit',
+    body: 'Eine einflussreiche Studie fand bei Betroffenen eine stärkere Kopplung zwischen Hörsystem und den Hirnarealen für Mundbewegungen. Die Hypothese: Beim Hören von Kaugeräuschen läuft das eigene Mund-Motorsystem ungewollt mit. Das könnte erklären, warum gerade Körpergeräusche anderer so unerträglich sind.',
+    source: 'Kumar et al. 2021, Journal of Neuroscience',
+  },
+  {
+    title: 'Nachahmen ist verbreitet und hilft vielen',
+    body: 'Über 45 Prozent der Befragten ahmen Triggergeräusche manchmal nach, und gut zwei Drittel davon empfinden das als erleichternd. Falls du das kennst: Es ist eine bekannte, häufige Reaktion und nichts Seltsames.',
+    source: 'Ash et al. 2024, Journal of Clinical Psychology',
+  },
+  {
+    title: 'Mehrere Wege führen zu Linderung',
+    body: 'Eine Studie verglich Akzeptanz- und Commitment-Therapie mit einfachem Entspannungstraining. Beide halfen spürbar und ähnlich gut. Eine mögliche Deutung: Struktur, ein glaubwürdiges Werkzeug und das Gefühl von Selbstwirksamkeit sind selbst ein großer Teil der Wirkung.',
+    source: 'Twohig et al. 2025, Journal of Affective Disorders (randomisierte Studie)',
+  },
+  {
+    title: 'Rund jeder Zwanzigste ist betroffen',
+    body: 'Repräsentative Befragungen, auch aus Deutschland, schätzen: Etwa 5 Prozent der Bevölkerung erleben Misophonie in klinisch relevantem Ausmaß. Deutlich mehr Menschen kennen mildere Formen. Du bist damit alles andere als allein.',
+    source: 'u. a. repräsentative Erhebung Deutschland 2022/2024',
+  },
+  {
+    title: 'Misophonie hat eine eigene Signatur im Gehirn',
+    body: 'Neuere Bildgebungsarbeiten deuten darauf hin, dass sich die Netzwerkmuster bei Misophonie von denen bei Angststörungen und Depression unterscheiden. Das stützt die Sicht, dass Misophonie ein eigenständiges Phänomen ist und keine Unterform von etwas anderem. Die Befunde sind noch frisch und werden weiter geprüft.',
+    source: 'Human Brain Mapping 2026 (vorsichtig zu lesen, sehr neue Daten)',
   },
 ];
 
@@ -134,7 +193,7 @@ export const PREPARE = {
   eating: {
     icon: 'utensils', title: 'Essen mit anderen',
     tips: [
-      'Setz dich, wenn möglich, so, dass du Trigger nicht direkt vor dir hast — Kopf-Ende, Ecke, neben statt gegenüber.',
+      'Setz dich, wenn möglich, so, dass du Trigger nicht direkt vor dir hast: Kopfende, Ecke, neben statt gegenüber.',
       'Ein Hintergrundgeräusch (Musik, Radio, Ventilator) darf laufen. Das ist kein Zeichen von Schwäche.',
       'Selbst mitessen oder trinken maskiert oft die Geräusche der anderen.',
       'Verabrede vorher ein leises Signal mit einer vertrauten Person, wenn du kurz raus musst.',
@@ -146,21 +205,21 @@ export const PREPARE = {
       'Kopfhörer sind ein legitimes Arbeitsmittel, kein Rückzug. Du darfst sie tragen.',
       'Wenn möglich: ruhigerer Platz, weiter weg von Küche/Essbereich, oder feste Fokus-Zeiten.',
       'Kurze Pausen an der frischen Luft sind Erste Hilfe, kein Faulenzen.',
-      'Du musst deine Misophonie nicht erklären, um Rücksicht zu bitten — „Ich arbeite konzentrierter mit Kopfhörern“ reicht.',
+      'Du musst deine Misophonie nicht erklären, um Rücksicht zu bitten. „Ich arbeite konzentrierter mit Kopfhörern“ reicht.',
     ],
   },
   transit: {
     icon: 'train', title: 'Bus & Bahn',
     tips: [
       'Halte Kopfhörer und einen ruhigen Klang griffbereit, bevor du einsteigst.',
-      'Du darfst den Platz wechseln — so oft du willst. Du schuldest niemandem eine Erklärung.',
+      'Du darfst den Platz wechseln, so oft du willst. Du schuldest niemandem eine Erklärung.',
       'Ein Fensterplatz und der Blick nach draußen geben dir etwas Kontrolle zurück.',
     ],
   },
   home: {
     icon: 'home', title: 'Zu Hause / Familie',
     tips: [
-      'Sprich in einem ruhigen Moment darüber — nicht mitten im Trigger.',
+      'Sprich in einem ruhigen Moment darüber, nicht mitten im Trigger.',
       'Ich-Botschaften helfen: „Mir tut es gut, wenn …“ statt „Du machst immer …“.',
       'Ein vereinbarter Rückzugsort zu Hause ist Gold wert. Rausgehen ist erlaubt.',
       'Es ist okay, wenn nicht immer alle zusammen am Tisch sitzen müssen.',
@@ -169,7 +228,7 @@ export const PREPARE = {
   video: {
     icon: 'video', title: 'Videocalls',
     tips: [
-      'Nutze Untertitel/Transkript, wenn möglich — dann kannst du stummschalten und trotzdem folgen.',
+      'Nutze Untertitel/Transkript, wenn möglich. Dann kannst du stummschalten und trotzdem folgen.',
       'Eigenes Mikro stummschalten, fremde Kacheln bei Bedarf ausblenden (auch gegen visuelle Trigger).',
       'Kopfhörer mit gutem Klang trennen Stimmen von Nebengeräuschen.',
     ],
@@ -178,7 +237,7 @@ export const PREPARE = {
     icon: 'cap', title: 'Schule / Lernen',
     tips: [
       'Ein ruhiger Klang oder Ohrstöpsel beim Lernen sind Konzentrationshilfen.',
-      'Bei Prüfungen: frag nach einem ruhigeren Platz — das ist eine faire Bitte.',
+      'Bei Prüfungen: frag nach einem ruhigeren Platz. Das ist eine faire Bitte.',
       'Plane Pausen fest ein, bevor die Anspannung zu groß wird.',
     ],
   },
@@ -187,14 +246,14 @@ export const PREPARE = {
     tips: [
       'Ränder statt Mitte: Am Rand einer Menge hast du Luft und einen Weg nach draußen.',
       'Ohrstöpsel, die dämpfen ohne abzuschotten, sind hier Gold wert.',
-      'Plane vorher, wo du kurz auftanken kannst — eine ruhige Ecke, draußen, die Toilette.',
-      'Du musst nicht durchhalten, bis es „vorbei“ ist. Gehen dürfen entspannt — oft so sehr, dass Bleiben leichter wird.',
+      'Plane vorher, wo du kurz auftanken kannst: eine ruhige Ecke, draußen, die Toilette.',
+      'Du musst nicht durchhalten, bis es „vorbei“ ist. Gehen dürfen entspannt, oft so sehr, dass Bleiben leichter wird.',
     ],
   },
   event: {
     icon: 'sparkles', title: 'Feiern & Events',
     tips: [
-      'Komm früh — dann kannst du dir deinen Platz aussuchen (Rand, Nähe zur Tür).',
+      'Komm früh, dann kannst du dir deinen Platz aussuchen (Rand, Nähe zur Tür).',
       'Eine eingeweihte Person als Verbündete macht vieles leichter: Sie versteht, wenn du kurz verschwindest.',
       'Pausen sind normal. Niemand zählt, wie lange du am Tisch sitzt.',
       'Früher gehen ist völlig okay. Ein schöner kurzer Abend zählt mehr als ein durchgestandener langer.',
@@ -203,7 +262,7 @@ export const PREPARE = {
   festival: {
     icon: 'tent', title: 'Outdoor-Festival',
     tips: [
-      'Gehörschutz gehört auf Festivals sowieso dazu — du fällst damit nicht auf, du bist schlau.',
+      'Gehörschutz gehört auf Festivals sowieso dazu. Du fällst damit nicht auf, du bist schlau.',
       'Such dir früh Rückzugsorte: das eigene Zelt, ruhigere Bereiche, der Rand des Geländes.',
       'Verabrede ein einfaches Zeichen mit deinen Leuten für „ich brauch kurz Pause“.',
       'Plane Erholungsfenster ein (z. B. nachmittags), statt von früh bis nachts durchzuziehen.',
@@ -214,7 +273,7 @@ export const PREPARE = {
     tips: [
       'Platzwahl ist die halbe Miete: Wand im Rücken, Ecke, nicht mitten im Raum.',
       'Orte mit Hintergrundmusik oder Betriebsgeräusch sind oft leichter als stille Cafés.',
-      'Selbst essen und trinken maskiert — bestell dir ruhig zuerst etwas.',
+      'Selbst essen und trinken maskiert. Bestell dir ruhig zuerst etwas.',
       'Draußen sitzen ist oft angenehmer: mehr Raum, mehr Umgebungsgeräusche.',
     ],
   },
@@ -222,14 +281,14 @@ export const PREPARE = {
     icon: 'film', title: 'Kino / Theater',
     tips: [
       'Randplatz oder Gang-Nähe geben dir einen Fluchtweg, falls nötig.',
-      'Vorstellungen zu Randzeiten sind leerer — weniger Menschen, weniger Trigger.',
+      'Vorstellungen zu Randzeiten sind leerer: weniger Menschen, weniger Trigger.',
       'Es ist völlig in Ordnung, zwischendurch kurz rauszugehen.',
     ],
   },
   shopping: {
     icon: 'bag', title: 'Einkaufen',
     tips: [
-      'Ruhige Uhrzeiten nutzen (früh morgens, spät abends) — weniger Menschen, weniger Geräusche.',
+      'Ruhige Uhrzeiten nutzen (früh morgens, spät abends): weniger Menschen, weniger Geräusche.',
       'Mit Einkaufszettel bist du schneller wieder draußen.',
       'Kopfhörer oder Ohrstöpsel beim Einkaufen sind völlig legitim.',
     ],
@@ -238,8 +297,8 @@ export const PREPARE = {
     icon: 'moon', title: 'Einschlafen',
     tips: [
       'Ein gleichmäßiger Klang (Rauschen, Ventilator) kann Trigger überdecken.',
-      'Getrennte Decken oder etwas Abstand nehmen niemandem etwas weg — sie schützen deinen Schlaf.',
-      'Anspannung vor dem Schlafen ist normal. Der Atem-Anker hilft beim Runterkommen.',
+      'Getrennte Decken oder etwas Abstand nehmen niemandem etwas weg. Sie schützen deinen Schlaf.',
+      'Anspannung vor dem Schlafen ist normal. Der Atemanker hilft beim Runterkommen.',
     ],
   },
 };
@@ -250,7 +309,7 @@ export const SCRIPTS = [
     title: 'Einem nahen Menschen erklären',
     lines: [
       'Ich möchte dir etwas über mich erklären, das nichts mit dir als Person zu tun hat.',
-      'Bestimmte Geräusche lösen bei mir eine körperliche Stressreaktion aus — ich kann das nicht einfach abstellen.',
+      'Bestimmte Geräusche lösen bei mir eine körperliche Stressreaktion aus. Ich kann das nicht einfach abstellen.',
       'Wenn ich in so einem Moment kurz rausgehe, ist das kein Vorwurf an dich. Ich schütze mich nur.',
       'Es hilft mir sehr, wenn wir zusammen Lösungen finden, statt dass ich mich dafür schämen muss.',
     ],
@@ -260,14 +319,14 @@ export const SCRIPTS = [
     lines: [
       'Dürfte ich beim Essen Musik nebenbei laufen lassen? Das macht es für mich viel leichter.',
       'Wäre es okay, wenn ich mich woanders hinsetze? Das liegt nicht an dir.',
-      'Ich sag dann einfach kurz Bescheid und gehe ein paar Minuten raus — bin gleich wieder da.',
+      'Ich sag dann einfach kurz Bescheid und gehe ein paar Minuten raus und bin gleich wieder da.',
     ],
   },
 ];
 
 // Krisen-/Hilfe-Kontakte (Deutschland). Bewusst prominent, aber ruhig.
 export const CRISIS = {
-  intro: 'Wenn die Belastung sehr groß wird, du dich völlig zurückziehst oder dunkle Gedanken auftauchen: Du musst da nicht allein durch. Diese App kann dir zuhören — aber Menschen können mehr.',
+  intro: 'Wenn die Belastung sehr groß wird, du dich völlig zurückziehst oder dunkle Gedanken auftauchen: Du musst da nicht allein durch. Diese App kann dir zuhören, aber Menschen können mehr.',
   contacts: [
     { label: 'Telefonseelsorge (kostenlos, rund um die Uhr, anonym)', value: '0800 111 0 111', tel: '08001110111' },
     { label: 'Telefonseelsorge (zweite Nummer)', value: '0800 111 0 222', tel: '08001110222' },
@@ -276,4 +335,4 @@ export const CRISIS = {
   note: 'Für Misophonie selbst können Ärzt:innen, Psychotherapeut:innen oder HNO/Audiolog:innen erste Ansprechpartner sein. Deinen Datenexport aus dem Tagebuch darfst du gern mitnehmen.',
 };
 
-export const DISCLAIMER = 'MisoNIE unterstützt dich — es stellt keine Diagnose und ist keine Behandlung oder Therapie. Bei anhaltender oder starker Belastung wende dich bitte an professionelle Hilfe.';
+export const DISCLAIMER = 'MisoNIE unterstützt dich. Es stellt keine Diagnose und ist keine Behandlung oder Therapie. Bei anhaltender oder starker Belastung wende dich bitte an professionelle Hilfe.';

@@ -453,6 +453,24 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 18px 0; }
 .chip .icon { color: var(--green-soft); }
 .chip .icon svg { width: 1.1em; height: 1.1em; }
 
+/* ---------- KI-Chat ---------- */
+.chat-list { display: flex; flex-direction: column; gap: 10px; min-height: 120px; }
+.msg { display: flex; }
+.msg.me { justify-content: flex-end; }
+.msg .bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.msg.me .bubble { background: var(--green-deep); color: #eafff5; border-bottom-right-radius: 6px; }
+.msg.ai .bubble { background: var(--surface-2); border: 1px solid var(--line); border-bottom-left-radius: 6px; }
+.msg .bubble.typing { color: var(--faint); letter-spacing: 3px; }
+.chat-input { display: flex; gap: 10px; align-items: flex-end; }
+.chat-input textarea { flex: 1; min-height: 56px; }
+.chat-input .btn { flex: none; }
+
 /* Toast */
 .toast {
   position: fixed; left: 50%; bottom: calc(96px + var(--safe-bottom)); transform: translateX(-50%);

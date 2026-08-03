@@ -17,7 +17,7 @@ export function renderOnboarding(app, root) {
   function back() { if (i > 0) { i--; paint(); } }
 
   async function finish() {
-    // Abgeleitete Konfiguration: Notfall-Werkzeuge aus "was hilft schon".
+    // Abgeleitete Konfiguration: Notfallwerkzeuge aus "was hilft schon".
     draft.sosTools = deriveSosTools(draft);
     if (hasHelp(draft, 'mask')) draft.sound.enabled = true; // sie sagt: Maskieren hilft
     draft.onboardingComplete = true;
@@ -69,7 +69,7 @@ function buildSteps() {
         el('div', { class: 'kicker', text: 'Willkommen' }),
         el('h1', { text: 'Schön, dass du da bist.' }),
         el('p', { class: 'sub', text: 'Was du erlebst, ist real. Hier musst du dich nicht erklären, nichts rechtfertigen und nichts „aushalten“.' }),
-        el('p', { class: 'sub', text: 'Ich lerne dich in ein paar ruhigen Schritten kennen und richte mich dann nach dir — nicht umgekehrt.' }),
+        el('p', { class: 'sub', text: 'Ich lerne dich in ein paar ruhigen Schritten kennen und richte mich dann nach dir, nicht umgekehrt.' }),
         el('div', { class: 'note soft', style: { marginTop: '18px' } }, [
           el('span', { class: 'icon', html: icon('lock') }),
           ' Alles, was du mir erzählst, bleibt auf diesem Gerät. Kein Konto, kein Server, keine Weitergabe.',
@@ -84,7 +84,7 @@ function buildSteps() {
       body: (ctx) => [
         el('div', { class: 'kicker', text: 'Kennenlernen' }),
         el('h1', { text: 'Wie darf ich dich nennen?' }),
-        el('p', { class: 'sub', text: 'Ganz wie du magst — Vorname, Spitzname, oder lass es frei. Nur für dich sichtbar.' }),
+        el('p', { class: 'sub', text: 'Ganz wie du magst: Vorname, Spitzname, oder lass es frei. Nur für dich sichtbar.' }),
         el('label', { class: 'field', style: { marginTop: '10px' } }, [
           el('input', {
             type: 'text', value: ctx.draft.name || '', placeholder: 'Dein Name (optional)',
@@ -121,7 +121,7 @@ function buildSteps() {
         wrap.append(
           el('div', { class: 'kicker', text: 'Kennenlernen' }),
           el('h1', { text: 'Was sind deine Auslöser?' }),
-          el('p', { class: 'sub', text: 'Tippe an, was dich trifft — beim Hören, beim Sehen oder schon im Voraus. Nichts davon wird abgespielt, du liest nur.' }),
+          el('p', { class: 'sub', text: 'Tippe an, was dich trifft: beim Hören, beim Sehen oder schon im Voraus. Nichts davon wird abgespielt, du liest nur.' }),
         );
         for (const key of ['hear', 'see', 'anticipate']) {
           const group = TRIGGERS[key];
@@ -159,7 +159,7 @@ function buildSteps() {
         el('div', { class: 'stack', style: { marginTop: '8px' } }, [
           bigChoice('Ja, Struktur tut mir gut', 'Ich mag Routinen und den Überblick.',
             ctx.draft.likesStructure === true, () => { ctx.draft.likesStructure = true; ctx.refresh(); }),
-          bigChoice('Nein, das stresst mich eher', 'Halt es für mich schlicht — nur Werkzeuge, wenn ich sie brauche.',
+          bigChoice('Nein, das stresst mich eher', 'Halt es für mich schlicht, nur Werkzeuge, wenn ich sie brauche.',
             ctx.draft.likesStructure === false, () => { ctx.draft.likesStructure = false; ctx.refresh(); }),
         ]),
       ],
@@ -171,7 +171,7 @@ function buildSteps() {
       body: (ctx) => [
         el('div', { class: 'kicker', text: 'Kennenlernen' }),
         el('h1', { text: 'Was hilft dir jetzt schon?' }),
-        el('p', { class: 'sub', text: 'Was du schon nutzt, lege ich dir in der Notfall-Hilfe nach vorn.' }),
+        el('p', { class: 'sub', text: 'Was du schon nutzt, lege ich dir in der Notfallhilfe nach vorn.' }),
         el('div', { class: 'chips', style: { marginTop: '6px' } },
           HELPS.map(h => chip(h.label, ctx.draft.helps.includes(h.id),
             (on) => toggle(ctx.draft.helps, h.id, on)))),
@@ -188,7 +188,7 @@ function buildSteps() {
         el('div', { class: 'card', style: { marginTop: '8px' } },
           el('ul', { style: { margin: 0, paddingLeft: '20px' } },
             describeAdaptation(ctx.draft).map(t => el('li', { text: t, style: { marginBottom: '8px' } })))),
-        el('p', { class: 'ob-hint', text: 'Du kannst das jederzeit ändern — über „Mehr“ und „Kennenlernen anpassen“.' }),
+        el('p', { class: 'ob-hint', text: 'Du kannst das jederzeit ändern, über „Mehr“ und „Kennenlernen anpassen“.' }),
         el('p', { class: 'disclaimer', text: DISCLAIMER }),
       ],
     },
@@ -297,18 +297,18 @@ function mirrorTitle(draft) {
 export function describeAdaptation(draft) {
   const out = [];
   const needs = draft.needs;
-  if (needs.includes('moment')) out.push('Die Notfall-Hilfe steht bei dir ganz vorn — im Ernstfall ein Fingertipp entfernt.');
+  if (needs.includes('moment')) out.push('Die Notfallhilfe steht bei dir ganz vorn, im Ernstfall ein Fingertipp entfernt.');
   if (needs.includes('develop')) out.push('„Mein Weg“ begleitet dich langfristig: jeden Tag ein kleiner Schritt, abgestimmt auf deine Situationen.');
   if (needs.includes('understand')) out.push('Ruhige Erklärungen und Übungen bekommen auf der Startseite Platz.');
   if (needs.includes('journal')) out.push('Dein Tagebuch für die Therapie ist gleich griffbereit.');
-  if (!needs.length || needs.includes('unsure')) out.push('Ich halte alles offen und schlicht — du findest in deinem Tempo, was dir hilft.');
+  if (!needs.length || needs.includes('unsure')) out.push('Ich halte alles offen und schlicht. Du findest in deinem Tempo, was dir hilft.');
 
-  if (draft.likesStructure === true) out.push('Weil dir Struktur guttut, zeige ich dir einen sanften Tagesanker — ganz ohne Druck oder Streaks.');
+  if (draft.likesStructure === true) out.push('Weil dir Struktur guttut, zeige ich dir einen sanften Tagesanker, ganz ohne Druck oder Streaks.');
   if (draft.likesStructure === false) out.push('Weil Struktur dich eher stresst, blende ich Routinen aus. Nur Werkzeuge, wenn du sie brauchst.');
 
   const trg = draft.triggers.length;
   if (trg) out.push(`Deine ${trg} ${trg === 1 ? 'Auslöser ist' : 'Auslöser sind'} im Tagebuch schon vorausgewählt.`);
   if (draft.situations.length) out.push('Für deine schwierigen Situationen liegen passende Vorbereitungen bereit.');
-  if (draft.helps.includes('mask')) out.push('Den Ruhe-Klang habe ich dir freigeschaltet — er startet trotzdem nur, wenn du ihn antippst.');
+  if (draft.helps.includes('mask')) out.push('Den Ruheklang habe ich dir freigeschaltet. Er startet trotzdem nur, wenn du ihn antippst.');
   return out;
 }

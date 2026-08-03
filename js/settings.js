@@ -3,6 +3,7 @@ import { el, mount, toast } from './ui.js';
 import { SOS_TOOLS, DISCLAIMER } from './data.js';
 import { exportAll, importAll, wipeAll, getProfile, defaultProfile, saveProfile } from './store.js';
 import { icon } from './icons.js';
+import { AI_MODELS, defaultAI, callAI } from './ai.js';
 
 export async function renderSettings(app) {
   const p = app.profile;
@@ -16,17 +17,17 @@ export async function renderSettings(app) {
     el('label', { class: 'field' }, [nameInput]),
   ]));
 
-  // Ruhe-Klang
+  // Ruheklang
   const soundToggle = el('button', { class: 'btn ' + (p.sound.enabled ? 'btn-primary' : 'btn-ghost') },
-    p.sound.enabled ? 'Ruhe-Klang: an' : 'Ruhe-Klang: aus');
+    p.sound.enabled ? 'Ruheklang: an' : 'Ruheklang: aus');
   soundToggle.addEventListener('click', async () => { p.sound.enabled = !p.sound.enabled; await app.save(); app.rerender(); });
   view.append(el('div', { class: 'card' }, [
-    el('h3', { text: 'Ruhe-Klang' }),
-    el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Ein sanftes Rauschen für den Trigger-Moment. Standardmäßig aus — es startet immer nur, wenn du es antippst.' }),
+    el('h3', { text: 'Ruheklang' }),
+    el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Ein sanftes Rauschen für den Triggermoment. Standardmäßig aus. Es startet immer nur, wenn du es antippst.' }),
     soundToggle,
   ]));
 
-  // Notfall-Werkzeuge
+  // Notfallwerkzeuge
   const enabled = new Set((p.sosTools && p.sosTools.length) ? p.sosTools : SOS_TOOLS.map(t => t.id));
   const toolList = el('div', { class: 'stack' }, SOS_TOOLS.map(t => {
     const on = enabled.has(t.id);
@@ -45,10 +46,13 @@ export async function renderSettings(app) {
     return btn;
   }));
   view.append(el('div', { class: 'card' }, [
-    el('h3', { text: 'Notfall-Werkzeuge' }),
+    el('h3', { text: 'Notfallwerkzeuge' }),
     el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Wähle, was in „Jetzt Hilfe“ erscheint.' }),
     toolList,
   ]));
+
+  // KI-Assistent (BYOK, optional)
+  view.append(buildAICard(app));
 
   // Kennenlernen anpassen
   view.append(el('div', { class: 'card' }, [
@@ -94,7 +98,7 @@ export async function renderSettings(app) {
 
   // Hilfe & Datenschutz
   view.append(el('div', { class: 'card' }, [
-    el('h3', { text: 'Hilfe & Krisen-Kontakte' }),
+    el('h3', { text: 'Hilfe & Krisenkontakte' }),
     el('button', { class: 'btn btn-ghost', onClick: () => app.navigate('hilfe') }, 'Öffnen'),
   ]));
 
@@ -113,9 +117,63 @@ export async function renderSettings(app) {
   ]));
 
   view.append(el('p', { class: 'disclaimer', text: DISCLAIMER }));
-  view.append(el('p', { class: 'disclaimer', text: 'MisoNIE · lokale PWA · v1' }));
+  view.append(el('p', { class: 'disclaimer', text: 'MisoNIE · lokale PWA · v1.2' }));
 
   return view;
 }
 
 function todayStr() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+
+// ---------------------------------------------------------------- KI (BYOK)
+
+function buildAICard(app) {
+  const p = app.profile;
+  if (!p.ai) p.ai = defaultAI();
+
+  const card = el('div', { class: 'card stack' });
+  const paint = () => {
+    const ai = p.ai;
+    const rows = [
+      el('h3', { text: 'KI-Assistent (optional)' }),
+      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Ein Chat für Fragen zu Misophonie und eine Zusammenfassung deines Tagebuchs fürs Therapiegespräch. Dafür brauchst du einen eigenen API-Schlüssel von Anthropic (console.anthropic.com). Die App spricht direkt mit dem Dienst, es gibt keinen Server dazwischen.' }),
+    ];
+
+    const toggle = el('button', { class: 'btn ' + (ai.enabled ? 'btn-primary' : 'btn-ghost') },
+      ai.enabled ? 'KI: an' : 'KI: aus');
+    toggle.addEventListener('click', async () => { ai.enabled = !ai.enabled; await app.save(); paint(); app.rerender(); });
+    rows.push(toggle);
+
+    if (ai.enabled) {
+      const keyInput = el('input', {
+        type: 'password', placeholder: 'API-Schlüssel (sk-ant-…)',
+        value: ai.apiKey || '', autocomplete: 'off',
+      });
+      keyInput.addEventListener('change', async () => { ai.apiKey = keyInput.value.trim(); await app.save(); toast('Schlüssel gespeichert (nur auf diesem Gerät)'); });
+      rows.push(el('label', { class: 'field' }, [el('span', { class: 'lbl', text: 'Dein API-Schlüssel' }), keyInput]));
+
+      const modelSel = el('select', {}, AI_MODELS.map(m =>
+        el('option', { value: m.id, text: m.label, selected: (ai.model || 'claude-sonnet-5') === m.id ? true : null })));
+      modelSel.addEventListener('change', async () => { ai.model = modelSel.value; await app.save(); });
+      rows.push(el('label', { class: 'field' }, [el('span', { class: 'lbl', text: 'Modell' }), modelSel]));
+
+      const testBtn = el('button', { class: 'btn btn-ghost' }, 'Verbindung testen');
+      const status = el('p', { class: 'muted small', style: { margin: '6px 0 0' } });
+      testBtn.addEventListener('click', async () => {
+        if (!ai.apiKey) { status.textContent = 'Bitte zuerst den Schlüssel eintragen.'; return; }
+        testBtn.disabled = true; status.textContent = 'Teste …';
+        try {
+          await callAI(p, { system: 'Antworte mit genau einem Wort.', messages: [{ role: 'user', content: 'Sag Hallo.' }], maxTokens: 16 });
+          status.textContent = 'Verbindung steht. Der Chat ist bereit.';
+        } catch (e) { status.textContent = e.message; }
+        testBtn.disabled = false;
+      });
+      rows.push(testBtn, status);
+
+      rows.push(el('button', { class: 'btn btn-ghost', onClick: () => app.navigate('chat') }, 'Zum KI-Chat'));
+      rows.push(el('div', { class: 'note' }, 'Der Schlüssel bleibt auf diesem Gerät und wird nie in Sicherungen exportiert. Anfragen kosten bei Anthropic ein paar Cent. Dein Tagebuch wird nur gesendet, wenn du im Tagebuch ausdrücklich eine KI-Zusammenfassung anforderst.'));
+    }
+    mount(card, rows);
+  };
+  paint();
+  return card;
+}

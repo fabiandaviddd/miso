@@ -60,8 +60,9 @@ export function defaultProfile() {
     situations: [],         // situation-ids
     likesStructure: null,   // true | false | null
     helps: [],              // help-ids
-    sosTools: [],           // geordnete tool-ids für die Notfall-Hilfe
+    sosTools: [],           // geordnete tool-ids für die Notfallhilfe
     sound: { enabled: false, volume: 0.5 },
+    ai: { enabled: false, apiKey: '', model: 'claude-sonnet-5' }, // BYOK, lokal
     seenDisclaimer: false,
   };
 }
@@ -119,11 +120,13 @@ export async function exportAll() {
   const profile = await getProfile();
   const entries = await getEntries();
   const practiceLog = await getKV('practiceLog');
+  // API-Schlüssel gehört NIE in eine Sicherungsdatei.
+  const safeProfile = profile ? { ...profile, ai: { ...(profile.ai || {}), apiKey: '' } } : profile;
   return {
     app: 'MisoNIE',
     schema: SCHEMA_VERSION,
     exportedAt: new Date().toISOString(),
-    profile,
+    profile: safeProfile,
     entries,
     practiceLog: practiceLog || null,
   };
@@ -131,7 +134,15 @@ export async function exportAll() {
 
 export async function importAll(data) {
   if (!data || data.app !== 'MisoNIE') throw new Error('Diese Datei sieht nicht nach einer MisoNIE-Sicherung aus.');
-  if (data.profile) await saveProfile(Object.assign(defaultProfile(), data.profile));
+  if (data.profile) {
+    const incoming = Object.assign(defaultProfile(), data.profile);
+    // Sicherungen enthalten nie den API-Schlüssel: lokalen Schlüssel behalten.
+    const current = await getProfile();
+    if (current && current.ai && current.ai.apiKey && !(incoming.ai && incoming.ai.apiKey)) {
+      incoming.ai = Object.assign({}, incoming.ai, { apiKey: current.ai.apiKey });
+    }
+    await saveProfile(incoming);
+  }
   if (Array.isArray(data.entries)) {
     await tx('journal', 'readwrite', os => { data.entries.forEach(e => { if (e && e.id) os.put(e); }); });
   }

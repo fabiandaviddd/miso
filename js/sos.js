@@ -1,5 +1,5 @@
-// Notfall-Hilfe im Trigger-Moment. Vollbild, ruhig, eine Aktion pro Screen,
-// große Flächen. Nie ein überraschender Ton — der Ruhe-Klang startet nur auf
+// Notfallhilfe im Triggermoment. Vollbild, ruhig, eine Aktion pro Screen,
+// große Flächen. Nie ein überraschender Ton — der Ruheklang startet nur auf
 // ausdrücklichen Tipp.
 import { el, mount, clear, buzz, toast } from './ui.js';
 import {
@@ -58,7 +58,7 @@ function showList(app, show) {
     const p = app.profile;
     const ids = (p.sosTools && p.sosTools.length) ? p.sosTools : SOS_TOOLS.map(t => t.id);
     const tools = ids.map(id => SOS_TOOLS.find(t => t.id === id)).filter(Boolean)
-      .filter(t => !(t.needsSound && !p.sound.enabled) || true); // Ruhe-Klang bleibt sichtbar, fragt selbst nach
+      .filter(t => !(t.needsSound && !p.sound.enabled) || true); // Ruheklang bleibt sichtbar, fragt selbst nach
 
     const wrap = el('div', { class: 'stack', style: { width: '100%' } });
     wrap.append(
@@ -88,7 +88,7 @@ const TOOLS = {
     const phase = el('div', { class: 'phase', text: 'Bereit?' });
     const orb = el('div', { class: 'orb' });
     mount(body, el('div', { class: 'breath-wrap' }, [
-      el('h1', { class: 'center', text: 'Atem-Anker' }),
+      el('h1', { class: 'center', text: 'Atemanker' }),
       el('p', { class: 'muted center', text: 'Folge dem Kreis. Ein… und wieder aus.' }),
       el('div', { class: 'breath' }, [orb, phase]),
       doneRow(ctx),
@@ -107,9 +107,9 @@ const TOOLS = {
 
   leave(body, ctx) {
     mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
-      el('h1', { text: 'Raus hier — das ist erlaubt.' }),
+      el('h1', { text: 'Raus hier. Das ist erlaubt.' }),
       el('p', { class: 'muted', text: 'Sich kurz zu entfernen ist kein Versagen und keine Unhöflichkeit. Es ist Selbstschutz. Du musst dich nicht erklären.' }),
-      el('div', { class: 'section-label', text: 'Falls du etwas sagen möchtest — tippen zum Kopieren' }),
+      el('div', { class: 'section-label', text: 'Falls du etwas sagen möchtest: tippen zum Kopieren' }),
       ...EXIT_LINES.map(line => copyLine(line)),
       el('p', { class: 'muted small', text: 'Und wenn du nichts sagen willst: Auch das ist völlig okay.' }),
       doneRow(ctx),
@@ -140,9 +140,9 @@ const TOOLS = {
     const render = () => {
       if (!p.sound.enabled) {
         mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
-          el('h1', { text: 'Ruhe-Klang' }),
+          el('h1', { text: 'Ruheklang' }),
           el('p', { class: 'muted', text: 'Ein weiches, gleichmäßiges Rauschen kann Trigger überdecken. Es startet nur, wenn du es möchtest.' }),
-          el('button', { class: 'btn btn-primary', onClick: async () => { p.sound.enabled = true; await ctx.app.save(); render(); } }, 'Ruhe-Klang einschalten'),
+          el('button', { class: 'btn btn-primary', onClick: async () => { p.sound.enabled = true; await ctx.app.save(); render(); } }, 'Ruheklang einschalten'),
           doneRow(ctx),
         ]));
         return;
@@ -152,8 +152,8 @@ const TOOLS = {
       vol.addEventListener('input', () => { const v = vol.value / 100; p.sound.volume = v; ctx.mask.setVolume(v); });
       vol.addEventListener('change', () => ctx.app.save());
       mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
-        el('h1', { text: 'Ruhe-Klang' }),
-        el('p', { class: 'muted', text: 'Ein sanftes Rauschen, das du drüberlegen kannst. Als Werkzeug für den Moment — nicht, um dich dauerhaft abzuschotten.' }),
+        el('h1', { text: 'Ruheklang' }),
+        el('p', { class: 'muted', text: 'Ein sanftes Rauschen, das du drüberlegen kannst. Als Werkzeug für den Moment, nicht als dauerhafte Abschottung.' }),
         el('button', {
           class: 'btn btn-primary',
           onClick: () => { if (ctx.mask.isPlaying()) ctx.mask.stop(); else ctx.mask.start(p.sound.volume ?? 0.5); render(); },
@@ -169,7 +169,7 @@ const TOOLS = {
   surf(body, ctx) {
     mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
       el('h1', { text: 'Die Welle reiten' }),
-      el('p', { class: 'muted', text: 'Der Impuls — wegrennen, schreien, es abstellen — ist wie eine Welle. Er steigt an, erreicht einen Höhepunkt und ebbt wieder ab. Ganz von allein.' }),
+      el('p', { class: 'muted', text: 'Der Impuls (wegrennen, schreien, es abstellen) ist wie eine Welle. Er steigt an, erreicht einen Höhepunkt und ebbt wieder ab. Ganz von allein.' }),
       el('div', { class: 'card' }, [
         el('p', { html: '<strong>Du musst nichts tun.</strong> Beobachte die Welle nur, wie von außen:' }),
         el('ul', { style: { margin: 0, paddingLeft: '20px', color: 'var(--muted)' } }, [
@@ -282,7 +282,7 @@ function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function todayStr() { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
 function pad(n) { return String(n).padStart(2, '0'); }
 
-// ---------------------------------------------------------------- Ruhe-Klang
+// ---------------------------------------------------------------- Ruheklang
 
 class MaskPlayer {
   constructor() { this.ctx = null; this.src = null; this.gain = null; this.playing = false; }

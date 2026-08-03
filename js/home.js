@@ -1,15 +1,17 @@
 // Adaptive Startseite. Reihenfolge & Sichtbarkeit richten sich nach dem
 // Onboarding: die App passt sich der Person an, nicht umgekehrt.
-import { el } from './ui.js';
+import { el, buzz } from './ui.js';
 import { icon } from './icons.js';
 import { getEntries } from './store.js';
 import { todaysPractice } from './path.js';
+import { SITUATIONS } from './data.js';
+import { aiReady } from './ai.js';
 
 const AREAS = {
-  weg:         { icon: 'route', title: 'Mein Weg', sub: 'Jeden Tag ein kleiner Schritt — abgestimmt auf dich', route: 'weg' },
-  verstehen:   { icon: 'lightbulb', title: 'Verstehen', sub: 'Was Misophonie ist — und dass du nicht allein bist', route: 'verstehen' },
+  weg:         { icon: 'route', title: 'Mein Weg', sub: 'Jeden Tag ein kleiner Schritt, abgestimmt auf dich', route: 'weg' },
+  verstehen:   { icon: 'lightbulb', title: 'Verstehen', sub: 'Was Misophonie ist und dass du nicht allein bist', route: 'verstehen' },
   vorbereiten: { icon: 'map', title: 'Vorbereiten', sub: 'Für schwierige Situationen & Gespräche gewappnet sein', route: 'vorbereiten' },
-  tagebuch:    { icon: 'book', title: 'Tagebuch', sub: 'Kurz festhalten — mit Datenexport für deine Therapie', route: 'tagebuch' },
+  tagebuch:    { icon: 'book', title: 'Tagebuch', sub: 'Kurz festhalten, mit Datenexport für deine Therapie', route: 'tagebuch' },
 };
 
 export async function renderHome(app) {
@@ -30,7 +32,7 @@ export async function renderHome(app) {
       onClick: () => app.navigate('hilfe'),
     }, [
       el('div', { html: '<strong>Die letzten Tage waren schwer.</strong>' }),
-      'Das tut mir leid. Du musst da nicht allein durch — hier findest du Menschen, die zuhören. Tippen zum Öffnen.',
+      'Das tut mir leid. Du musst da nicht allein durch. Hier findest du Menschen, die zuhören. Tippen zum Öffnen.',
     ]));
   }
 
@@ -38,9 +40,29 @@ export async function renderHome(app) {
   if (p.needs.includes('moment') || p.needs.length === 0) {
     view.append(el('div', { class: 'card pad-lg', style: { background: 'linear-gradient(160deg, var(--surface-2), var(--surface))' } }, [
       el('h2', { text: 'Bist du gerade getriggert?' }),
-      el('p', { class: 'muted', text: 'Ein Fingertipp — und wir gehen zusammen durch den Moment. Kein Nachdenken nötig.' }),
+      el('p', { class: 'muted', text: 'Ein Fingertipp und wir gehen zusammen durch den Moment. Kein Nachdenken nötig.' }),
       el('button', { class: 'btn btn-primary', style: { marginTop: '6px' }, onClick: () => app.openSOS() },
         [el('span', { class: 'icon', html: icon('rings') }), ' Jetzt Hilfe']),
+    ]));
+  }
+
+  // Täglicher Check-in: Was steht heute an? Ein Tipp führt zur Vorbereitung.
+  if ((p.situations || []).length) {
+    const chips = el('div', { class: 'chips' }, [
+      ...p.situations.map(id => {
+        const s = SITUATIONS.find(x => x.id === id);
+        if (!s) return null;
+        return el('button', { class: 'chip', onClick: () => { buzz(); location.hash = '#/vorbereiten/' + id; } }, [
+          el('span', { class: 'icon', html: icon(s.icon) }), s.label,
+        ]);
+      }),
+      el('button', { class: 'chip', onClick: () => app.navigate('vorbereiten') }, 'Etwas anderes'),
+    ]);
+    view.append(el('div', { class: 'card' }, [
+      el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'Kurzer Check-in' }),
+      el('h3', { text: 'Was machst du heute?' }),
+      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Tippe an, was heute ansteht. Dann schauen wir gemeinsam kurz auf die Vorbereitung.' }),
+      chips,
     ]));
   }
 
@@ -50,7 +72,7 @@ export async function renderHome(app) {
     view.append(el('div', { class: 'card' }, [
       el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'Dein Tagesanker' }),
       el('p', { style: { marginTop: 0, marginBottom: '4px', fontWeight: 600 }, text: `Heute: ${practice.title}` }),
-      el('p', { class: 'muted small', style: { marginTop: 0 }, text: `Ca. ${practice.minutes} Min. — ohne Druck, ohne Streaks.` }),
+      el('p', { class: 'muted small', style: { marginTop: 0 }, text: `Ca. ${practice.minutes} Min., ohne Druck und ohne Streaks.` }),
       el('div', { class: 'btn-row' }, [
         el('button', { class: 'btn btn-ghost', onClick: () => app.navigate('weg') },
           [el('span', { class: 'icon', html: icon('route') }), ' Zum Schritt']),
@@ -69,6 +91,18 @@ export async function renderHome(app) {
       el('span', { class: 't-body' }, [
         el('span', { class: 't-title', text: a.title }),
         el('span', { class: 't-sub', text: a.sub }),
+      ]),
+      el('span', { class: 'chev', html: '›' }),
+    ]));
+  }
+
+  // KI-Chat, nur wenn eingerichtet
+  if (aiReady(p)) {
+    view.append(el('button', { class: 'tile', onClick: () => app.navigate('chat') }, [
+      el('span', { class: 'emoji', html: icon('sparkles') }),
+      el('span', { class: 't-body' }, [
+        el('span', { class: 't-title', text: 'Fragen stellen' }),
+        el('span', { class: 't-sub', text: 'Dein KI-Assistent zu Misophonie und Misokinesie' }),
       ]),
       el('span', { class: 'chev', html: '›' }),
     ]));

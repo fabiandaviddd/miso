@@ -1,6 +1,6 @@
 // MisoNIE Service Worker — macht die App offline nutzbar und installierbar.
 // Bei Änderungen die CACHE-Version erhöhen, damit Nutzer:innen das Update bekommen.
-const CACHE = 'misonie-v2';
+const CACHE = 'misonie-v3';
 
 const ASSETS = [
   './',
@@ -12,6 +12,8 @@ const ASSETS = [
   './js/icons.js',
   './js/data.js',
   './js/path.js',
+  './js/ai.js',
+  './js/chat.js',
   './js/store.js',
   './js/onboarding.js',
   './js/home.js',

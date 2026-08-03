@@ -5,6 +5,7 @@ import { el, mount, clear, toast, esc, buzz } from './ui.js';
 import { getEntries, addEntry, updateEntry, deleteEntry } from './store.js';
 import { SITUATIONS, DISCLAIMER } from './data.js';
 import { icon } from './icons.js';
+import { aiReady, callAI, SUMMARY_SYSTEM, buildSummaryInput } from './ai.js';
 
 const HELPED = ['Rausgegangen', 'Kopfhörer / Klang', 'Weggeschaut', 'Geatmet', 'Abgelenkt', 'Umgedeutet', 'Angesprochen', 'Mit jemandem geredet', 'Freundlich zu mir', 'Nichts geholfen'];
 const LVL_VARS = { 1: '--lvl-1', 2: '--lvl-2', 3: '--lvl-3', 4: '--lvl-4', 5: '--lvl-5' };
@@ -40,14 +41,16 @@ async function build(app, state, repaint) {
 
   // --- Export ---
   if (entries.length) {
-    nodes.push(el('div', { class: 'card' }, [
+    const exportCard = el('div', { class: 'card' }, [
       el('h3', { class: 'h-icon' }, [el('span', { class: 'icon', html: icon('download') }), 'Datenexport']),
-      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Nimm deine Einträge mit — z. B. für dein Therapiegespräch. Als übersichtliche Seite zum Ausdrucken/als PDF oder als Textdatei.' }),
+      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Nimm deine Einträge mit, zum Beispiel für dein Therapiegespräch. Als übersichtliche Seite zum Ausdrucken/als PDF oder als Textdatei.' }),
       el('div', { class: 'btn-row' }, [
         el('button', { class: 'btn btn-ghost', onClick: () => exportPrintable(entries, p) }, [el('span', { class: 'icon', html: icon('printer') }), ' Drucken / PDF']),
         el('button', { class: 'btn btn-ghost', onClick: () => downloadText(entries, p) }, [el('span', { class: 'icon', html: icon('doc') }), ' Textdatei']),
       ]),
-    ]));
+    ]);
+    if (aiReady(p)) exportCard.append(buildAISummaryBlock(app, entries, state, repaint));
+    nodes.push(exportCard);
   }
 
   // --- Liste ---
@@ -55,7 +58,7 @@ async function build(app, state, repaint) {
   if (!entries.length) {
     nodes.push(el('div', { class: 'empty' }, [
       el('div', { class: 'big', html: icon('book') }),
-      el('p', { text: 'Noch keine Einträge. Ganz ohne Druck — halte fest, wann und was du magst.' }),
+      el('p', { text: 'Noch keine Einträge. Ganz ohne Druck. Halte fest, wann und was du magst.' }),
     ]));
   } else {
     const list = el('div', {});
@@ -103,7 +106,7 @@ function entryForm(app, state, repaint) {
 
   // Situation
   const sit = el('select', {}, [
-    el('option', { value: '', text: '— Situation wählen (optional) —' }),
+    el('option', { value: '', text: 'Situation wählen (optional)' }),
     ...SITUATIONS.map(s => el('option', { value: s.id, text: s.label, selected: d.situation === s.id ? true : null })),
   ]);
   sit.addEventListener('change', () => { d.situation = sit.value; });
@@ -113,7 +116,7 @@ function entryForm(app, state, repaint) {
     toggleChip(h, d.helped.includes(h), (on) => setArr(d.helped, h, on))));
 
   // Notiz
-  const note = el('textarea', { placeholder: 'Notiz (optional) — was war, wie ging’s dir?', maxLength: 600 });
+  const note = el('textarea', { placeholder: 'Notiz (optional): Was war, wie ging es dir?', maxLength: 600 });
   note.value = d.note || '';
   note.addEventListener('input', () => { d.note = note.value; });
 
@@ -150,6 +153,52 @@ function entryForm(app, state, repaint) {
       editing ? el('button', { class: 'btn btn-quiet auto', text: 'Abbrechen', onClick: async () => { state.editId = null; state.draft = emptyDraft(app); await repaint(); } }) : null,
     ]),
   );
+  return wrap;
+}
+
+// ---------------------------------------------------------------- KI-Zusammenfassung
+
+function buildAISummaryBlock(app, entries, state, repaint) {
+  const wrap = el('div', { style: { marginTop: '14px' } });
+
+  if (state.aiSummary) {
+    wrap.append(
+      el('hr', { class: 'sep' }),
+      el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'KI-Zusammenfassung (letzte 7 Tage)' }),
+      el('p', { style: { whiteSpace: 'pre-wrap', margin: '0 0 12px' }, text: state.aiSummary }),
+      el('div', { class: 'btn-row' }, [
+        el('button', { class: 'btn btn-ghost', onClick: async () => {
+          try { await navigator.clipboard.writeText(state.aiSummary); toast('Kopiert'); }
+          catch { toast('Kopieren nicht möglich'); }
+        } }, 'Kopieren'),
+        el('button', { class: 'btn btn-quiet', onClick: async () => { state.aiSummary = null; await repaint(); } }, 'Ausblenden'),
+      ]),
+      el('p', { class: 'faint small', style: { margin: '8px 0 0' }, text: 'Von einer KI erstellt. Bitte lies sie gegen, bevor du sie weitergibst.' }),
+    );
+    return wrap;
+  }
+
+  const btn = el('button', { class: 'btn btn-ghost' }, 'KI-Zusammenfassung der Woche');
+  const status = el('p', { class: 'faint small', style: { margin: '8px 0 0' } });
+  btn.addEventListener('click', async () => {
+    const input = buildSummaryInput(entries, sitLabel);
+    if (!input) { status.textContent = 'In den letzten 7 Tagen gibt es keine Einträge.'; return; }
+    const ok = confirm('Dafür werden deine Tagebucheinträge der letzten 7 Tage (Datum, Stärke, Auslöser, Situation, was geholfen hat, Notizen) einmalig an den KI-Dienst Anthropic gesendet, über deinen eigenen Schlüssel. Sonst verlässt nichts dein Gerät.\n\nEinverstanden?');
+    if (!ok) return;
+    btn.disabled = true; status.textContent = 'Die Zusammenfassung entsteht …';
+    try {
+      state.aiSummary = await callAI(app.profile, {
+        system: SUMMARY_SYSTEM,
+        messages: [{ role: 'user', content: input }],
+        maxTokens: 1024,
+      });
+      await repaint();
+    } catch (e) {
+      status.textContent = e.message;
+      btn.disabled = false;
+    }
+  });
+  wrap.append(btn, status);
   return wrap;
 }
 
@@ -208,7 +257,7 @@ function weekChart(entries) {
 function buildReport(entries, p) {
   const name = p.name ? p.name : '—';
   const lines = [];
-  lines.push('MisoNIE — Tagebuch-Auszug');
+  lines.push('MisoNIE Tagebuchauszug');
   lines.push('Name: ' + name);
   lines.push('Erstellt: ' + new Date().toLocaleString('de-DE'));
   lines.push('Einträge: ' + entries.length);
@@ -217,7 +266,7 @@ function buildReport(entries, p) {
   lines.push('----------------------------------------');
   for (const e of entries) {
     lines.push('');
-    lines.push(`${prettyDate(e.date, e.createdAt)}  —  Stärke: ${e.level ?? '—'}/5`);
+    lines.push(`${prettyDate(e.date, e.createdAt)}  ·  Stärke: ${e.level ?? 'ohne'}/5`);
     if (e.triggers && e.triggers.length) lines.push('Auslöser: ' + e.triggers.join(', '));
     if (e.situation) lines.push('Situation: ' + sitLabel(e.situation));
     if (e.helped && e.helped.length) lines.push('Geholfen hat: ' + e.helped.join(', '));
@@ -246,7 +295,7 @@ function exportPrintable(entries, p) {
       <td>${e.note ? esc(e.note) : ''}</td>
     </tr>`).join('');
   const html = `<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
-    <title>MisoNIE Tagebuch — ${esc(p.name || '')}</title>
+    <title>MisoNIE Tagebuch ${esc(p.name || '')}</title>
     <style>
       body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#12211a;margin:32px;}
       h1{font-size:20px;margin:0 0 4px;} .meta{color:#555;font-size:13px;margin-bottom:16px;}
@@ -258,7 +307,7 @@ function exportPrintable(entries, p) {
       .note{color:#666;font-size:11px;margin-top:18px;}
       @media print{body{margin:12mm;}}
     </style></head><body>
-    <h1>MisoNIE — Tagebuch</h1>
+    <h1>MisoNIE Tagebuch</h1>
     <div class="meta">Name: ${esc(p.name || '—')} · Erstellt: ${esc(new Date().toLocaleString('de-DE'))} · ${entries.length} Einträge</div>
     <table><thead><tr><th>Datum</th><th>Stärke</th><th>Auslöser</th><th>Situation</th><th>Geholfen hat</th><th>Notiz</th></tr></thead>
     <tbody>${rows}</tbody></table>

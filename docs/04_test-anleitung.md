@@ -70,6 +70,20 @@ Wichtig: **Kein Streak, kein Druck.** Jeder Schritt zählt für sich, egal wann 
 
 ---
 
+## 6b. Der KI-Assistent (freiwillig, mit eigenem Schlüssel)
+
+MisoNIE kann dir zusätzlich einen KI-Chat anbieten: für Fragen zu Misophonie und Misokinesie, für Worte für dein Umfeld, und für eine automatische **Wochenzusammenfassung** deines Tagebuchs fürs Therapiegespräch.
+
+Das ist komplett freiwillig und standardmäßig aus. Es braucht einen eigenen (kostenpflichtigen, wenige Cent pro Frage) API-Schlüssel:
+
+1. Auf **console.anthropic.com** ein Konto anlegen und einen API-Schlüssel erstellen.
+2. In MisoNIE unter **Mehr (⋯) → KI-Assistent** einschalten, Schlüssel einfügen, **„Verbindung testen"**.
+3. Danach findest du auf der Startseite **„Fragen stellen"**, und im Tagebuch beim Datenexport den Button für die **KI-Zusammenfassung**.
+
+Wichtig zu wissen: Der Schlüssel bleibt nur auf deinem Gerät (er landet nie in Sicherungsdateien). Der Chat sendet **nur, was du dort tippst**. Dein Tagebuch wird ausschließlich dann gesendet, wenn du die Wochenzusammenfassung ausdrücklich anforderst und der Frage zustimmst.
+
+---
+
 ## 7. Sichere deine Daten (kurz, aber wichtig)
 
 Weil alles nur auf deinem Gerät liegt, gehen deine Einträge verloren, wenn du das Gerät wechselst oder den Browser-Speicher löschst. Deshalb: unter **Mehr (⋯) → „Sicherung exportieren"** ab und zu eine Sicherungsdatei speichern. Auf einem neuen Gerät kannst du sie mit **„Sicherung laden"** wieder einspielen.

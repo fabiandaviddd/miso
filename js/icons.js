@@ -11,7 +11,7 @@ const ICONS = {
   map: '<path d="M4 6.2 L9.3 4.4 L14.7 6.2 L20 4.4 V17.8 L14.7 19.6 L9.3 17.8 L4 19.6 Z"/><path d="M9.3 4.4 V17.8"/><path d="M14.7 6.2 V19.6"/>',
   lightbulb: '<path d="M9.6 17.6 H14.4"/><path d="M10.4 20.2 H13.6"/><path d="M12 3.6 A5.6 5.6 0 0 1 15.2 13.8 C14.6 14.3 14.3 14.9 14.3 15.6 H9.7 C9.7 14.9 9.4 14.3 8.8 13.8 A5.6 5.6 0 0 1 12 3.6 Z"/>',
 
-  // Notfall-Werkzeuge
+  // Notfallwerkzeuge
   breathe: '<circle cx="10" cy="13.5" r="5.3"/><circle cx="16.8" cy="7.8" r="2.7"/><circle cx="18.2" cy="14.6" r="1.3"/>',
   door: '<path d="M13.5 20.2 H5.8 V3.8 H13.5"/><path d="M12.5 12 H21"/><path d="M18.4 9.4 L21 12 L18.4 14.6"/>',
   leaf: '<path d="M12 20.2 C6.8 16.6 5.4 10.2 12 4.2 C18.6 10.2 17.2 16.6 12 20.2 Z"/><path d="M12 8.5 V20.2"/>',

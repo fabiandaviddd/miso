@@ -9,6 +9,7 @@ import { renderPrepare } from './prepare.js';
 import { renderSettings } from './settings.js';
 import { renderHelp } from './help.js';
 import { renderPath } from './path.js';
+import { renderChat } from './chat.js';
 import { icon } from './icons.js';
 import { openSOS } from './sos.js';
 
@@ -29,6 +30,7 @@ const ROUTES = {
   start:       { view: renderHome,     title: 'MisoNIE', primary: true },
   tagebuch:    { view: renderJournal,  title: 'Tagebuch', primary: true },
   weg:         { view: renderPath,     title: 'Mein Weg', back: 'start' },
+  chat:        { view: renderChat,     title: 'KI-Assistent', back: 'start' },
   verstehen:   { view: renderLearn,    title: 'Verstehen', back: 'start' },
   vorbereiten: { view: renderPrepare,  title: 'Vorbereiten', back: 'start' },
   mehr:        { view: renderSettings, title: 'Mehr', back: 'start' },

@@ -82,6 +82,26 @@ Nach 5 Minuten Test durch eine Betroffene kamen konkrete Rückmeldungen; alle um
 
 ---
 
+## 4c. v1.2 — zweite Feedbackrunde + KI-Modul
+
+Wieder alle Punkte der Testerin umgesetzt, plus das freigegebene KI-Modul:
+
+- **KI-Modul (BYOK, opt-in, standardmäßig aus):**
+  - `js/ai.js`: direkter Aufruf der Anthropic-API vom Gerät (`anthropic-dangerous-direct-browser-access`), kein eigener Server. Modelle wählbar (Sonnet 5 Standard, Haiku 4.5, Opus 5). Zwei System-Prompts: Wissens-Chat (validierend, keine Diagnosen, keine Expositionsempfehlungen, Krisenverweis) und Therapie-Zusammenfassung.
+  - `js/chat.js`: Chat mit Vorschlagsfragen, lokal gespeichertem Verlauf, klarem Hinweis „Dein Tagebuch wird nie mitgesendet".
+  - **KI-Wochenzusammenfassung** im Tagebuch: sendet nach ausdrücklicher Einwilligung die Einträge der letzten 7 Tage und erzeugt eine strukturierte Zusammenfassung fürs Therapiegespräch (kopierbar).
+  - Schlüssel-Sicherheit: API-Schlüssel liegt nur lokal, wird **nie in Sicherungen exportiert**; beim Import bleibt der lokale Schlüssel erhalten. Einrichtung unter „Mehr" mit Verbindungstest.
+- **„Aus der Forschung"**: kuratierte, monatlich rotierende Forschungs-Funde in „Verstehen" (10 Einträge mit Quelle, ehrlich formuliert). Für tagesaktuelle Fragen gibt es den Chat (mit ehrlichem Hinweis auf den Wissensstand des Modells).
+- **Sirenen-Karte** in „Verstehen": die Analogie „alle sind auf Sirenen trainiert, dein Gehirn hat Kauen den Sirenenstatus gegeben".
+- **„Mein Weg" vertieft:** unter jeder Tagesübung steht „Warum das langfristig hilft" (Wirkmechanismus), darunter eine „Passend dazu · Verstehen"-Karte zum Wochenthema; nach Abschluss erscheint eine **Bonusaufgabe** zum Wochenthema.
+- **Täglicher Check-in** auf der Startseite: „Was machst du heute?" mit den eigenen Situationen als Chips; ein Tipp öffnet gezielt die passende Vorbereiten-Karte (Deep-Link `#/vorbereiten/<id>`).
+- **Sprach-Feinschliff:** alle Gedankenstriche aus den App-Texten entfernt (außer notwendigen Zeichen wie Platzhaltern); Kopplungs-Bindestriche aufgelöst (Ruheklang, Atemanker, Notfallhilfe, Triggermoment …).
+- Service-Worker-Cache auf `misonie-v3`.
+
+**Hinweis:** Der KI-Pfad wurde mit einem Dummy-Schlüssel bis zur API-Grenze getestet (UI, Einwilligung, Fehlerbehandlung). Der erste echte Aufruf braucht einen gültigen Schlüssel; dafür gibt es in „Mehr" den Button „Verbindung testen".
+
+---
+
 ## 5. Lokal ausprobieren / weiterentwickeln
 
 Die App braucht einen kleinen Webserver (wegen ES-Modulen & Service Worker; direktes Öffnen der Datei reicht nicht):
