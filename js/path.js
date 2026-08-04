@@ -185,7 +185,7 @@ export async function renderPath(app) {
     ]));
 
     // Heutiger Schritt
-    view.append(el('div', { class: 'card pad-lg', style: { borderColor: 'var(--green-deep)' } }, [
+    view.append(el('div', { class: 'card pad-lg tint-green' }, [
       el('div', { class: 'section-label', style: { marginTop: 0 }, text: `Heute für dich · ca. ${practice.minutes} Min.` }),
       el('h2', { text: practice.title }),
       el('p', { class: 'muted', text: practice.intro }),
@@ -207,7 +207,7 @@ export async function renderPath(app) {
       const bonusPool = PRACTICES.filter(pr => pr.theme === theme.id && !doneIds.includes(pr.id));
       if (bonusPool.length) {
         const bonus = bonusPool[dayNumber() % bonusPool.length];
-        view.append(el('div', { class: 'card' }, [
+        view.append(el('div', { class: 'card tint-cream' }, [
           el('div', { class: 'section-label', style: { marginTop: 0 }, text: `Bonus, wenn du magst · ca. ${bonus.minutes} Min.` }),
           el('h3', { text: bonus.title }),
           el('p', { class: 'muted', text: bonus.intro }),

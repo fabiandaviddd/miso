@@ -14,7 +14,7 @@ export async function renderLearn(app) {
   // Forschungs-Fund des Monats (rotiert monatlich durch kuratierte Studien)
   const now = new Date();
   const finding = RESEARCH[(now.getFullYear() * 12 + now.getMonth()) % RESEARCH.length];
-  view.append(el('div', { class: 'card', style: { borderColor: 'var(--green-deep)' } }, [
+  view.append(el('div', { class: 'card tint-cream' }, [
     el('div', { class: 'section-label', style: { marginTop: 0 }, text: `Aus der Forschung · ${MONTHS[now.getMonth()]} ${now.getFullYear()}` }),
     el('h3', { text: finding.title }),
     el('p', { class: 'lead', style: { marginBottom: '8px' }, text: finding.body }),

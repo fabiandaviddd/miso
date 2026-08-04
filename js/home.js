@@ -38,7 +38,7 @@ export async function renderHome(app) {
 
   // "Im Moment" — prominent, wenn das ein Bedürfnis ist
   if (p.needs.includes('moment') || p.needs.length === 0) {
-    view.append(el('div', { class: 'card pad-lg', style: { background: 'linear-gradient(160deg, var(--surface-2), var(--surface))' } }, [
+    view.append(el('div', { class: 'card pad-lg tint-green' }, [
       el('h2', { text: 'Bist du gerade getriggert?' }),
       el('p', { class: 'muted', text: 'Ein Fingertipp und wir gehen zusammen durch den Moment. Kein Nachdenken nötig.' }),
       el('button', { class: 'btn btn-primary', style: { marginTop: '6px' }, onClick: () => app.openSOS() },
@@ -69,7 +69,7 @@ export async function renderHome(app) {
   // Tagesanker — nur wenn Struktur gewünscht: zeigt den heutigen Schritt
   if (p.likesStructure === true) {
     const practice = todaysPractice(p);
-    view.append(el('div', { class: 'card' }, [
+    view.append(el('div', { class: 'card tint-cream' }, [
       el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'Dein Tagesanker' }),
       el('p', { style: { marginTop: 0, marginBottom: '4px', fontWeight: 600 }, text: `Heute: ${practice.title}` }),
       el('p', { class: 'muted small', style: { marginTop: 0 }, text: `Ca. ${practice.minutes} Min., ohne Druck und ohne Streaks.` }),
