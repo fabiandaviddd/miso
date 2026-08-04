@@ -214,7 +214,7 @@ export async function renderPath(app) {
           el('ol', { style: { margin: '0 0 14px', paddingLeft: '20px', color: 'var(--text)' } },
             bonus.steps.map(s => el('li', { text: s, style: { marginBottom: '8px' } }))),
           el('button', { class: 'btn btn-ghost', onClick: () => markDone(bonus) },
-            [el('span', { class: 'icon', html: icon('check') }), ' Auch gemacht']),
+            [el('span', { class: 'icon', html: icon('check') }), ' Da ging noch was']),
         ]));
       } else {
         view.append(el('div', { class: 'note soft' }, 'Alles zum Wochenthema geschafft. Das reicht dicke für heute.'));
