@@ -5,7 +5,7 @@ Ein ruhiger Begleiter bei **Misophonie** (und Misokinesie) — eine installierba
 - 📱 **Smartphone-first**, als PWA installierbar, **offline** nutzbar
 - 🔒 **Local-first:** kein Konto, kein Server, keine Tracker — alle Daten bleiben auf dem Gerät (IndexedDB)
 - 🆘 **Notfall-Hilfe** im Trigger-Moment (ein Tap) · 📔 **Tagebuch mit Export** für die Therapie
-- 🌿 Ruhig, respektvoll, dunkle Grüntöne · **keine Trigger-Sounds, keine Exposition**
+- 🌿 Ruhig, respektvoll, warm-helles Design mit tiefem Grün als tragender Farbe · **keine Trigger-Sounds, keine Exposition**
 - 🧩 Ohne Framework/Build-Schritt (reines HTML/CSS/JS) — langlebig und überall statisch hostbar
 
 ## Lokal starten

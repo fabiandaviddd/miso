@@ -102,6 +102,18 @@ Wieder alle Punkte der Testerin umgesetzt, plus das freigegebene KI-Modul:
 
 ---
 
+## 4d. Design v2 (freigegeben)
+
+Auf Wunsch des Auftraggebers wurde das Design nach einer Behance-Referenz (Mental-Health-UX-Case-Study) überarbeitet, per Entwurf abgestimmt und freigegeben:
+
+- Warm-heller Elfenbein-Grund, Karten fast weiß mit weichen Schatten; wichtige Karten mit Pastell-Tönungen (Grün, Pfirsich, Creme).
+- Grün bleibt die tragende Farbe: tiefes Waldgrün als Primär-, Icon- und Tintenfarbe; Koralle und Bernstein als sparsame Komplementär-Akzente.
+- Serifen-Displayschrift für Überschriften über die systemeigene Serife (`ui-serif`, auf iOS „New York"). Kein externer Font-Download, App bleibt offline-fähig.
+- Outline-Pill-Buttons für Sekundäraktionen, gefüllte tiefgrüne Primär-Buttons; helle Statusleiste und Manifest-Farben.
+- Der ursprüngliche Rahmen „dunkle Grüntöne" wurde damit bewusst zu „tiefes Grün auf warmem hellem Grund" weiterentwickelt. Ein optionaler Dunkelmodus ist ein möglicher späterer Ausbau (alle Farben liegen als CSS-Variablen in `css/styles.css`).
+
+---
+
 ## 5. Lokal ausprobieren / weiterentwickeln
 
 Die App braucht einen kleinen Webserver (wegen ES-Modulen & Service Worker; direktes Öffnen der Datei reicht nicht):
