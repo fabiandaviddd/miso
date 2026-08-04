@@ -10,7 +10,7 @@ import { aiReady } from './ai.js';
 const AREAS = {
   weg:         { icon: 'route', title: 'Mein Weg', sub: 'Jeden Tag ein kleiner Schritt, abgestimmt auf dich', route: 'weg' },
   verstehen:   { icon: 'lightbulb', title: 'Verstehen', sub: 'Was Misophonie ist und dass du nicht allein bist', route: 'verstehen' },
-  vorbereiten: { icon: 'map', title: 'Vorbereiten', sub: 'Für schwierige Situationen & Gespräche gewappnet sein', route: 'vorbereiten' },
+  vorbereiten: { icon: 'map', title: 'Vorbereiten', sub: 'Tipps für schwierige Situationen und Gespräche', route: 'vorbereiten' },
   tagebuch:    { icon: 'book', title: 'Tagebuch', sub: 'Kurz festhalten, mit Datenexport für deine Therapie', route: 'tagebuch' },
 };
 
@@ -22,7 +22,7 @@ export async function renderHome(app) {
   // Sanfte Begrüßung
   view.append(el('div', {}, [
     el('h1', { text: greeting(p) }),
-    el('p', { class: 'muted', style: { marginTop: '-2px' }, text: 'Ich bin da. In deinem Tempo.' }),
+    el('p', { class: 'muted', style: { marginTop: '-2px' }, text: 'Ich bin da, wenn du mich brauchst.' }),
   ]));
 
   // Behutsamer Hilfe-Hinweis bei anhaltend hoher Belastung
@@ -40,7 +40,7 @@ export async function renderHome(app) {
   if (p.needs.includes('moment') || p.needs.length === 0) {
     view.append(el('div', { class: 'card pad-lg tint-green' }, [
       el('h2', { text: 'Bist du gerade getriggert?' }),
-      el('p', { class: 'muted', text: 'Ein Fingertipp und wir gehen zusammen durch den Moment. Kein Nachdenken nötig.' }),
+      el('p', { class: 'muted', text: 'Tipp einmal. Den Rest machen wir zusammen.' }),
       el('button', { class: 'btn btn-primary', style: { marginTop: '6px' }, onClick: () => app.openSOS() },
         [el('span', { class: 'icon', html: icon('rings') }), ' Jetzt Hilfe']),
     ]));
@@ -61,7 +61,7 @@ export async function renderHome(app) {
     view.append(el('div', { class: 'card' }, [
       el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'Kurzer Check-in' }),
       el('h3', { text: 'Was machst du heute?' }),
-      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Tippe an, was heute ansteht. Dann schauen wir gemeinsam kurz auf die Vorbereitung.' }),
+      el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Tipp an, was heute ansteht. Dann zeige ich dir, was dabei hilft.' }),
       chips,
     ]));
   }

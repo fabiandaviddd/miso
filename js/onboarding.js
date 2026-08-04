@@ -68,8 +68,8 @@ function buildSteps() {
       body: () => [
         el('div', { class: 'kicker', text: 'Willkommen' }),
         el('h1', { text: 'Schön, dass du da bist.' }),
-        el('p', { class: 'sub', text: 'Was du erlebst, ist real. Hier musst du dich nicht erklären, nichts rechtfertigen und nichts „aushalten“.' }),
-        el('p', { class: 'sub', text: 'Ich lerne dich in ein paar ruhigen Schritten kennen und richte mich dann nach dir, nicht umgekehrt.' }),
+        el('p', { class: 'sub', text: 'Was du erlebst, ist real. Du musst dich hier nicht erklären und nichts aushalten.' }),
+        el('p', { class: 'sub', text: 'Ich stelle dir ein paar Fragen, um dich kennenzulernen. Danach richte ich mich nach dir.' }),
         el('div', { class: 'note soft', style: { marginTop: '18px' } }, [
           el('span', { class: 'icon', html: icon('lock') }),
           ' Alles, was du mir erzählst, bleibt auf diesem Gerät. Kein Konto, kein Server, keine Weitergabe.',
@@ -102,7 +102,7 @@ function buildSteps() {
       body: (ctx) => [
         el('div', { class: 'kicker', text: 'Kennenlernen' }),
         el('h1', { text: 'Was brauchst du gerade am meisten?' }),
-        el('p', { class: 'sub', text: 'Mehrfachauswahl ist okay. Danach richte ich meine Startseite danach aus.' }),
+        el('p', { class: 'sub', text: 'Du kannst mehreres auswählen. Danach richte ich die Startseite darauf aus.' }),
         multiChips(ctx, 'needs', [
           { id: 'moment', icon: 'rings', label: 'Hilfe im Moment' },
           { id: 'develop', icon: 'route', label: 'Langfristige Entwicklung' },
@@ -121,7 +121,7 @@ function buildSteps() {
         wrap.append(
           el('div', { class: 'kicker', text: 'Kennenlernen' }),
           el('h1', { text: 'Was sind deine Auslöser?' }),
-          el('p', { class: 'sub', text: 'Tippe an, was dich trifft: beim Hören, beim Sehen oder schon im Voraus. Nichts davon wird abgespielt, du liest nur.' }),
+          el('p', { class: 'sub', text: 'Tippe an, was dich trifft: beim Hören, beim Sehen oder schon im Voraus. Ich spiele nichts davon ab, du liest nur.' }),
         );
         for (const key of ['hear', 'see', 'anticipate']) {
           const group = TRIGGERS[key];
@@ -141,7 +141,7 @@ function buildSteps() {
       body: (ctx) => [
         el('div', { class: 'kicker', text: 'Kennenlernen' }),
         el('h1', { text: 'Wo ist es am schwersten?' }),
-        el('p', { class: 'sub', text: 'Das hilft mir, dir passende Vorbereitungen anzubieten.' }),
+        el('p', { class: 'sub', text: 'Dann kann ich dir zeigen, was in diesen Situationen hilft.' }),
         el('div', { class: 'chips', style: { marginTop: '6px' } },
           SITUATIONS.map(s => chip([iconSpan(s.icon), s.label],
             ctx.draft.situations.includes(s.id),
@@ -184,7 +184,7 @@ function buildSteps() {
       body: (ctx) => [
         el('div', { class: 'kicker', text: 'Fast fertig' }),
         el('h1', { text: mirrorTitle(ctx.draft) }),
-        el('p', { class: 'sub', text: 'So habe ich mich für dich eingerichtet:' }),
+        el('p', { class: 'sub', text: 'Das habe ich für dich eingestellt:' }),
         el('div', { class: 'card', style: { marginTop: '8px' } },
           el('ul', { style: { margin: 0, paddingLeft: '20px' } },
             describeAdaptation(ctx.draft).map(t => el('li', { text: t, style: { marginBottom: '8px' } })))),
@@ -297,18 +297,18 @@ function mirrorTitle(draft) {
 export function describeAdaptation(draft) {
   const out = [];
   const needs = draft.needs;
-  if (needs.includes('moment')) out.push('Die Notfallhilfe steht bei dir ganz vorn, im Ernstfall ein Fingertipp entfernt.');
+  if (needs.includes('moment')) out.push('Die Notfallhilfe steht bei dir ganz vorn, mit einem Tippen erreichbar.');
   if (needs.includes('develop')) out.push('„Mein Weg“ begleitet dich langfristig: jeden Tag ein kleiner Schritt, abgestimmt auf deine Situationen.');
-  if (needs.includes('understand')) out.push('Ruhige Erklärungen und Übungen bekommen auf der Startseite Platz.');
+  if (needs.includes('understand')) out.push('Erklärungen und Übungen stehen auf der Startseite weiter oben.');
   if (needs.includes('journal')) out.push('Dein Tagebuch für die Therapie ist gleich griffbereit.');
   if (!needs.length || needs.includes('unsure')) out.push('Ich halte alles offen und schlicht. Du findest in deinem Tempo, was dir hilft.');
 
-  if (draft.likesStructure === true) out.push('Weil dir Struktur guttut, zeige ich dir einen sanften Tagesanker, ganz ohne Druck oder Streaks.');
+  if (draft.likesStructure === true) out.push('Weil dir Struktur guttut, zeige ich dir jeden Tag einen kleinen Schritt auf der Startseite. Ohne Druck, ohne Streaks.');
   if (draft.likesStructure === false) out.push('Weil Struktur dich eher stresst, blende ich Routinen aus. Nur Werkzeuge, wenn du sie brauchst.');
 
   const trg = draft.triggers.length;
   if (trg) out.push(`Deine ${trg} ${trg === 1 ? 'Auslöser ist' : 'Auslöser sind'} im Tagebuch schon vorausgewählt.`);
-  if (draft.situations.length) out.push('Für deine schwierigen Situationen liegen passende Vorbereitungen bereit.');
-  if (draft.helps.includes('mask')) out.push('Den Ruheklang habe ich dir freigeschaltet. Er startet trotzdem nur, wenn du ihn antippst.');
+  if (draft.situations.length) out.push('Für deine schwierigen Situationen habe ich passende Tipps vorbereitet.');
+  if (draft.helps.includes('mask')) out.push('Den Ruheklang habe ich eingeschaltet. Er läuft erst, wenn du ihn antippst.');
   return out;
 }

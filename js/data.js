@@ -125,7 +125,7 @@ export const LEARN = [
   },
   {
     icon: 'sprout', title: 'Was realistisch hilft',
-    body: 'Es gibt keine Wunderlösung und keine „Heilung auf Knopfdruck“. Aber vieles lässt sich lindern: die Reaktion abfedern, sich erlauben rauszugehen, Situationen vorbereiten, freundlicher mit sich sein. Was hier drin steckt, sind solche Werkzeuge, kein Training, das dich Geräuschen aussetzt.',
+    body: 'Es gibt keine Wunderlösung und keine „Heilung auf Knopfdruck“. Aber vieles lässt sich lindern: die Reaktion abfedern, sich erlauben rauszugehen, Situationen vorbereiten, freundlicher mit sich sein. Genau solche Werkzeuge findest du hier. Kein Training, das dich Geräuschen aussetzt.',
   },
   {
     icon: 'ban', title: 'Warum wir dich Geräuschen nicht „aussetzen“',
@@ -204,7 +204,7 @@ export const PREPARE = {
     tips: [
       'Kopfhörer sind ein legitimes Arbeitsmittel, kein Rückzug. Du darfst sie tragen.',
       'Wenn möglich: ruhigerer Platz, weiter weg von Küche/Essbereich, oder feste Fokus-Zeiten.',
-      'Kurze Pausen an der frischen Luft sind Erste Hilfe, kein Faulenzen.',
+      'Kurze Pausen an der frischen Luft helfen wirklich. Das ist kein Faulenzen.',
       'Du musst deine Misophonie nicht erklären, um Rücksicht zu bitten. „Ich arbeite konzentrierter mit Kopfhörern“ reicht.',
     ],
   },
@@ -221,7 +221,7 @@ export const PREPARE = {
     tips: [
       'Sprich in einem ruhigen Moment darüber, nicht mitten im Trigger.',
       'Ich-Botschaften helfen: „Mir tut es gut, wenn …“ statt „Du machst immer …“.',
-      'Ein vereinbarter Rückzugsort zu Hause ist Gold wert. Rausgehen ist erlaubt.',
+      'Ein vereinbarter Rückzugsort zu Hause hilft enorm. Rausgehen ist erlaubt.',
       'Es ist okay, wenn nicht immer alle zusammen am Tisch sitzen müssen.',
     ],
   },
@@ -245,9 +245,9 @@ export const PREPARE = {
     icon: 'users', title: 'Menschenmengen',
     tips: [
       'Ränder statt Mitte: Am Rand einer Menge hast du Luft und einen Weg nach draußen.',
-      'Ohrstöpsel, die dämpfen ohne abzuschotten, sind hier Gold wert.',
+      'Ohrstöpsel, die dämpfen ohne abzuschotten, helfen hier besonders.',
       'Plane vorher, wo du kurz auftanken kannst: eine ruhige Ecke, draußen, die Toilette.',
-      'Du musst nicht durchhalten, bis es „vorbei“ ist. Gehen dürfen entspannt, oft so sehr, dass Bleiben leichter wird.',
+      'Du musst nicht durchhalten, bis es vorbei ist. Zu wissen, dass du gehen darfst, macht das Bleiben oft leichter.',
     ],
   },
   event: {
@@ -256,13 +256,13 @@ export const PREPARE = {
       'Komm früh, dann kannst du dir deinen Platz aussuchen (Rand, Nähe zur Tür).',
       'Eine eingeweihte Person als Verbündete macht vieles leichter: Sie versteht, wenn du kurz verschwindest.',
       'Pausen sind normal. Niemand zählt, wie lange du am Tisch sitzt.',
-      'Früher gehen ist völlig okay. Ein schöner kurzer Abend zählt mehr als ein durchgestandener langer.',
+      'Früher gehen ist völlig okay. Ein kurzer schöner Abend ist mehr wert als ein langer, den du nur überstehst.',
     ],
   },
   festival: {
     icon: 'tent', title: 'Outdoor-Festival',
     tips: [
-      'Gehörschutz gehört auf Festivals sowieso dazu. Du fällst damit nicht auf, du bist schlau.',
+      'Gehörschutz gehört auf Festivals sowieso dazu. Du fällst damit nicht auf.',
       'Such dir früh Rückzugsorte: das eigene Zelt, ruhigere Bereiche, der Rand des Geländes.',
       'Verabrede ein einfaches Zeichen mit deinen Leuten für „ich brauch kurz Pause“.',
       'Plane Erholungsfenster ein (z. B. nachmittags), statt von früh bis nachts durchzuziehen.',
@@ -271,7 +271,7 @@ export const PREPARE = {
   restaurant: {
     icon: 'coffee', title: 'Restaurant / Café',
     tips: [
-      'Platzwahl ist die halbe Miete: Wand im Rücken, Ecke, nicht mitten im Raum.',
+      'Der richtige Platz macht viel aus: Wand im Rücken, Ecke, nicht mitten im Raum.',
       'Orte mit Hintergrundmusik oder Betriebsgeräusch sind oft leichter als stille Cafés.',
       'Selbst essen und trinken maskiert. Bestell dir ruhig zuerst etwas.',
       'Draußen sitzen ist oft angenehmer: mehr Raum, mehr Umgebungsgeräusche.',
@@ -326,7 +326,7 @@ export const SCRIPTS = [
 
 // Krisen-/Hilfe-Kontakte (Deutschland). Bewusst prominent, aber ruhig.
 export const CRISIS = {
-  intro: 'Wenn die Belastung sehr groß wird, du dich völlig zurückziehst oder dunkle Gedanken auftauchen: Du musst da nicht allein durch. Diese App kann dir zuhören, aber Menschen können mehr.',
+  intro: 'Wenn die Belastung sehr groß wird, du dich völlig zurückziehst oder dunkle Gedanken auftauchen: Du musst da nicht allein durch. Eine App kann dir Werkzeuge geben. Menschen können mehr.',
   contacts: [
     { label: 'Telefonseelsorge (kostenlos, rund um die Uhr, anonym)', value: '0800 111 0 111', tel: '08001110111' },
     { label: 'Telefonseelsorge (zweite Nummer)', value: '0800 111 0 222', tel: '08001110222' },

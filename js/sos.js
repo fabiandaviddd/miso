@@ -89,7 +89,7 @@ const TOOLS = {
     const orb = el('div', { class: 'orb' });
     mount(body, el('div', { class: 'breath-wrap' }, [
       el('h1', { class: 'center', text: 'Atemanker' }),
-      el('p', { class: 'muted center', text: 'Folge dem Kreis. Ein… und wieder aus.' }),
+      el('p', { class: 'muted center', text: 'Folge dem Kreis. Einatmen, ausatmen.' }),
       el('div', { class: 'breath' }, [orb, phase]),
       doneRow(ctx),
     ]));
@@ -108,7 +108,7 @@ const TOOLS = {
   leave(body, ctx) {
     mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
       el('h1', { text: 'Raus hier. Das ist erlaubt.' }),
-      el('p', { class: 'muted', text: 'Sich kurz zu entfernen ist kein Versagen und keine Unhöflichkeit. Es ist Selbstschutz. Du musst dich nicht erklären.' }),
+      el('p', { class: 'muted', text: 'Kurz rauszugehen ist kein Versagen und nicht unhöflich. Du schützt dich damit und musst dich nicht erklären.' }),
       el('div', { class: 'section-label', text: 'Falls du etwas sagen möchtest: tippen zum Kopieren' }),
       ...EXIT_LINES.map(line => copyLine(line)),
       el('p', { class: 'muted small', text: 'Und wenn du nichts sagen willst: Auch das ist völlig okay.' }),
@@ -141,7 +141,7 @@ const TOOLS = {
       if (!p.sound.enabled) {
         mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
           el('h1', { text: 'Ruheklang' }),
-          el('p', { class: 'muted', text: 'Ein weiches, gleichmäßiges Rauschen kann Trigger überdecken. Es startet nur, wenn du es möchtest.' }),
+          el('p', { class: 'muted', text: 'Ein gleichmäßiges Rauschen kann Trigger überdecken. Es startet nur, wenn du es möchtest.' }),
           el('button', { class: 'btn btn-primary', onClick: async () => { p.sound.enabled = true; await ctx.app.save(); render(); } }, 'Ruheklang einschalten'),
           doneRow(ctx),
         ]));
@@ -153,7 +153,7 @@ const TOOLS = {
       vol.addEventListener('change', () => ctx.app.save());
       mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
         el('h1', { text: 'Ruheklang' }),
-        el('p', { class: 'muted', text: 'Ein sanftes Rauschen, das du drüberlegen kannst. Als Werkzeug für den Moment, nicht als dauerhafte Abschottung.' }),
+        el('p', { class: 'muted', text: 'Ein Rauschen, das du drüberlegen kannst. Für den Moment gedacht, nicht für den ganzen Tag.' }),
         el('button', {
           class: 'btn btn-primary',
           onClick: () => { if (ctx.mask.isPlaying()) ctx.mask.stop(); else ctx.mask.start(p.sound.volume ?? 0.5); render(); },
@@ -169,13 +169,13 @@ const TOOLS = {
   surf(body, ctx) {
     mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
       el('h1', { text: 'Die Welle reiten' }),
-      el('p', { class: 'muted', text: 'Der Impuls (wegrennen, schreien, es abstellen) ist wie eine Welle. Er steigt an, erreicht einen Höhepunkt und ebbt wieder ab. Ganz von allein.' }),
+      el('p', { class: 'muted', text: 'Der Impuls (wegrennen, schreien, es abstellen) ist wie eine Welle. Er steigt an und lässt dann wieder nach. Von allein.' }),
       el('div', { class: 'card' }, [
         el('p', { html: '<strong>Du musst nichts tun.</strong> Beobachte die Welle nur, wie von außen:' }),
         el('ul', { style: { margin: 0, paddingLeft: '20px', color: 'var(--muted)' } }, [
           el('li', { text: 'Wo spürst du die Anspannung im Körper?' }),
           el('li', { text: 'Sie darf da sein. Atme langsam weiter.' }),
-          el('li', { text: 'Jede Welle wird kleiner. Auch diese.' }),
+          el('li', { text: 'Jede Welle wird wieder kleiner, auch diese.' }),
         ]),
       ]),
       el('button', { class: 'btn btn-ghost', onClick: () => { ctx.show(TOOLS.breathe); } }, [el('span', { class: 'icon', html: icon('breathe') }), ' Mit dem Atem begleiten']),

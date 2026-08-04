@@ -40,7 +40,7 @@ export async function renderSettings(app) {
     btn.addEventListener('click', async () => {
       if (enabled.has(t.id)) enabled.delete(t.id); else enabled.add(t.id);
       p.sosTools = SOS_TOOLS.map(x => x.id).filter(id => enabled.has(id));
-      if (!p.sosTools.length) { p.sosTools = [t.id]; enabled.add(t.id); toast('Mindestens ein Werkzeug bleibt'); }
+      if (!p.sosTools.length) { p.sosTools = [t.id]; enabled.add(t.id); toast('Ein Werkzeug muss bleiben.'); }
       await app.save(); app.rerender();
     });
     return btn;
@@ -117,7 +117,7 @@ export async function renderSettings(app) {
   ]));
 
   view.append(el('p', { class: 'disclaimer', text: DISCLAIMER }));
-  view.append(el('p', { class: 'disclaimer', text: 'MisoNIE · lokale PWA · v1.2' }));
+  view.append(el('p', { class: 'disclaimer', text: 'MisoNIE · lokale PWA · v1.3' }));
 
   return view;
 }

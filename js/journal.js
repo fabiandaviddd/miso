@@ -58,7 +58,7 @@ async function build(app, state, repaint) {
   if (!entries.length) {
     nodes.push(el('div', { class: 'empty' }, [
       el('div', { class: 'big', html: icon('book') }),
-      el('p', { text: 'Noch keine Einträge. Ganz ohne Druck. Halte fest, wann und was du magst.' }),
+      el('p', { text: 'Noch keine Einträge. Schreib etwas auf, wann immer du magst. Es gibt keinen Zeitplan.' }),
     ]));
   } else {
     const list = el('div', {});
@@ -185,7 +185,7 @@ function buildAISummaryBlock(app, entries, state, repaint) {
     if (!input) { status.textContent = 'In den letzten 7 Tagen gibt es keine Einträge.'; return; }
     const ok = confirm('Dafür werden deine Tagebucheinträge der letzten 7 Tage (Datum, Stärke, Auslöser, Situation, was geholfen hat, Notizen) einmalig an den KI-Dienst Anthropic gesendet, über deinen eigenen Schlüssel. Sonst verlässt nichts dein Gerät.\n\nEinverstanden?');
     if (!ok) return;
-    btn.disabled = true; status.textContent = 'Die Zusammenfassung entsteht …';
+    btn.disabled = true; status.textContent = 'Einen Moment, ich fasse zusammen …';
     try {
       state.aiSummary = await callAI(app.profile, {
         system: SUMMARY_SYSTEM,

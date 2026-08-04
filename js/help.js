@@ -32,7 +32,7 @@ export async function renderHelp(app) {
       el('li', { text: 'Wenn du dich zunehmend zurückziehst oder niedergeschlagen fühlst.' }),
       el('li', { text: 'Wenn dunkle Gedanken auftauchen: dann bitte sofort eine der Nummern oben.' }),
     ]),
-    el('p', { class: 'muted', style: { marginTop: '10px', marginBottom: 0 }, text: 'Um Hilfe zu bitten ist ein Zeichen von Stärke, nicht von Schwäche.' }),
+    el('p', { class: 'muted', style: { marginTop: '10px', marginBottom: 0 }, text: 'Sich Hilfe zu holen ist kein Zeichen von Schwäche.' }),
   ]));
 
   view.append(el('p', { class: 'disclaimer', text: DISCLAIMER }));
