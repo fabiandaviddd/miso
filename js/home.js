@@ -46,18 +46,26 @@ export async function renderHome(app) {
     ]));
   }
 
-  // Täglicher Check-in: Was steht heute an? Ein Tipp führt zur Vorbereitung.
-  if ((p.situations || []).length) {
-    const chips = el('div', { class: 'chips' }, [
-      ...p.situations.map(id => {
-        const s = SITUATIONS.find(x => x.id === id);
-        if (!s) return null;
-        return el('button', { class: 'chip', onClick: () => { buzz(); location.hash = '#/vorbereiten/' + id; } }, [
-          el('span', { class: 'icon', html: icon(s.icon) }), s.label,
-        ]);
-      }),
-      el('button', { class: 'chip', onClick: () => app.navigate('vorbereiten') }, 'Etwas anderes'),
-    ]);
+  // Täglicher Check-in: eigene Situationen zuerst, der Rest auf Wunsch.
+  {
+    const own = p.situations || [];
+    const rest = SITUATIONS.filter(x => !own.includes(x.id));
+    const goTo = (id) => { buzz(); location.hash = '#/vorbereiten/' + id; };
+    const chipFor = (sitId) => {
+      const sit = SITUATIONS.find(x => x.id === sitId);
+      if (!sit) return null;
+      return el('button', { class: 'chip', onClick: () => goTo(sit.id) }, [
+        el('span', { class: 'icon', html: icon(sit.icon) }), sit.label,
+      ]);
+    };
+
+    const chips = el('div', { class: 'chips' }, own.map(chipFor).filter(Boolean));
+    const more = el('button', { class: 'chip', onClick: () => {
+      more.remove();
+      rest.forEach(sit => chips.append(chipFor(sit.id)));
+    } }, [el('span', { class: 'icon', html: icon('plus') }), 'Etwas anderes']);
+    chips.append(more);
+
     view.append(el('div', { class: 'card' }, [
       el('div', { class: 'section-label', style: { marginTop: 0 }, text: 'Kurzer Check-in' }),
       el('h3', { text: 'Was machst du heute?' }),

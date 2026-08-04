@@ -257,6 +257,51 @@ input:focus, textarea:focus, select:focus, .chip:focus-visible, .btn:focus-visib
 }
 ::placeholder { color: var(--faint); }
 
+/* ---------- Lautstärke-Regler ---------- */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 34px;           /* großzügige Trefferfläche */
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+.slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+}
+.slider::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px; height: 26px;
+  margin-top: -10px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 3px solid var(--surface);
+  box-shadow: 0 2px 6px rgba(31, 43, 34, 0.25);
+  cursor: pointer;
+}
+.slider::-moz-range-thumb {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 3px solid var(--surface);
+  box-shadow: 0 2px 6px rgba(31, 43, 34, 0.25);
+  cursor: pointer;
+}
+.slider:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; border-radius: 999px; }
+
 /* ---------- Stufen 1–5 ---------- */
 .levels { display: flex; gap: 10px; }
 .level {
@@ -352,28 +397,39 @@ input:focus, textarea:focus, select:focus, .chip:focus-visible, .btn:focus-visib
 .ob-foot .btn { width: auto; }
 .ob-foot .grow { flex: 1; }
 
-/* ---------- Atem-Anker ---------- */
-.breath-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 20px 0; }
-.breath {
-  width: 220px; height: 220px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(circle at 50% 45%, rgba(46,101,71,0.12), transparent 70%);
+/* ---------- Atemanker: Ring mit Glow, Glow folgt der Größe ---------- */
+.breath-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 10px 0; }
+
+.breath-stage {
   position: relative;
+  width: min(300px, 76vw);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
 }
-.breath .orb {
-  width: 120px; height: 120px; border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, #7FB294, var(--green));
-  box-shadow: 0 0 60px rgba(46, 101, 71, 0.25);
-  animation: breathe 10s var(--ease) infinite;
+.breath-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2.5px solid var(--green);
+  background: radial-gradient(circle at 50% 50%, rgba(46, 101, 71, 0.10), rgba(46, 101, 71, 0.02) 60%, transparent 72%);
+  transform: scale(var(--s, 0.55));
+  /* Glow-Stärke ist an die Ringgröße gekoppelt (per JS gesetzt) */
+  box-shadow:
+    0 0 var(--glow, 10px) rgba(46, 101, 71, var(--glow-a, 0.12)),
+    inset 0 0 calc(var(--glow, 10px) * 0.7) rgba(46, 101, 71, calc(var(--glow-a, 0.12) * 0.6));
+  transition: transform 4000ms cubic-bezier(0.37, 0, 0.63, 1),
+              box-shadow 4000ms cubic-bezier(0.37, 0, 0.63, 1);
+  will-change: transform;
 }
-.breath .phase {
-  position: absolute; font-size: 1.15rem; font-weight: 600; color: var(--text);
-}
-@keyframes breathe {
-  0%   { transform: scale(0.62); }
-  40%  { transform: scale(1.0); }   /* 4 s einatmen */
-  55%  { transform: scale(1.0); }   /* kurz halten */
-  100% { transform: scale(0.62); }  /* ~6 s ausatmen */
+.breath-label {
+  position: relative;
+  z-index: 1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.01em;
+  text-align: center;
 }
 
 /* ---------- Voller Ruhe-/Werkzeug-Screen ---------- */
@@ -390,7 +446,19 @@ input:focus, textarea:focus, select:focus, .chip:focus-visible, .btn:focus-visib
 .tool-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .tool-body.scroll { justify-content: flex-start; overflow-y: auto; padding-top: 10px; }
 .tool h1 { font-size: 1.6rem; }
-.big-statement { font-size: 1.5rem; font-weight: 600; line-height: 1.4; }
+.big-statement { font-size: 1.45rem; font-weight: 600; line-height: 1.45; }
+
+/* Satzkarte hält ihre Höhe, damit die Buttons beim Wechsel nicht springen */
+.statement-card {
+  display: flex;
+  align-items: center;
+  min-height: 168px;
+}
+.fade-in { animation: stmt 0.45s var(--ease); }
+@keyframes stmt {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: none; }
+}
 
 .grounding-step { text-align: center; }
 .grounding-step .num {
@@ -456,6 +524,10 @@ input:focus, textarea:focus, select:focus, .chip:focus-visible, .btn:focus-visib
 
 hr.sep { border: none; border-top: 1px solid var(--line); margin: 18px 0; }
 
+/* Abschluss-Buttons in Werkzeugen: untereinander, damit kein Text umbricht */
+.done-row { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; width: 100%; }
+.done-row .btn { width: 100%; }
+
 /* ---------- Icons (SVG) ---------- */
 .icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: -0.18em; }
 .icon .svgi, .icon svg { width: 1.25em; height: 1.25em; display: block; }
@@ -507,5 +579,5 @@ hr.sep { border: none; border-top: 1px solid var(--line); margin: 18px 0; }
 /* ---------- Reduzierte Bewegung ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  .breath .orb { animation: none; transform: scale(0.85); }
+  .breath-ring { transition: none !important; transform: scale(0.8) !important; }
 }

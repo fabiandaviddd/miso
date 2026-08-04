@@ -23,23 +23,26 @@ export function openSOS(app, directToolId) {
     overlay.remove();
   }
 
-  function show(builder, { back } = {}) {
+  function show(builder, { back = true } = {}) {
     if (cleanup) { cleanup(); cleanup = null; }
     const top = el('div', { class: 'tool-top' }, [
-      back ? el('button', { class: 'iconbtn', 'aria-label': 'Zurück', html: '‹', onClick: () => open(back) }) : el('div', {}),
+      back ? el('button', { class: 'iconbtn', 'aria-label': 'Zurück zur Auswahl', html: '‹', onClick: toList }) : el('div', {}),
       el('div', { class: 'spacer' }),
       el('button', { class: 'iconbtn', 'aria-label': 'Schließen', html: '✕', onClick: close }),
     ]);
     const body = el('div', { class: 'tool-body' });
     mount(overlay, [top, body]);
-    cleanup = builder(body, { app, close, open, mask, show }) || null;
+    cleanup = builder(body, { app, close, open, mask, show, toList }) || null;
   }
 
+  // Zurueck zur Werkzeug-Auswahl (nicht zur Startseite).
+  function toList() { mask.stop(); showList(app, show); }
+
   function open(toolId) {
-    if (!toolId) return showList(app, show);
+    if (!toolId) return toList();
     const builder = TOOLS[toolId];
-    if (builder) show(builder, { back: null });
-    else showList(app, show);
+    if (builder) show(builder);
+    else toList();
   }
 
   if (directToolId && TOOLS[directToolId]) show(TOOLS[directToolId]);
@@ -75,34 +78,60 @@ function showList(app, show) {
         el('span', { class: 'chev', html: '›' }),
       ]));
     }
-    function open(id) { const b = TOOLS[id]; if (b) show(b, { back: null }); }
+    function open(id) { const b = TOOLS[id]; if (b) show(b); }
     body.classList.add('scroll');
     mount(body, wrap);
-  });
+  }, { back: false });
 }
 
 // ---------------------------------------------------------------- Werkzeuge
 
 const TOOLS = {
   breathe(body, ctx) {
-    const phase = el('div', { class: 'phase', text: 'Bereit?' });
-    const orb = el('div', { class: 'orb' });
+    // Rhythmus bewusst ruhig: 4 s ein, 2 s halten, 6 s aus.
+    const IN = 4000, HOLD = 2000, OUT = 6000;
+    const ring = el('div', { class: 'breath-ring' });
+    const label = el('div', { class: 'breath-label', text: 'Gleich geht es los' });
+    const stage = el('div', { class: 'breath-stage' }, [ring, label]);
+
     mount(body, el('div', { class: 'breath-wrap' }, [
       el('h1', { class: 'center', text: 'Atemanker' }),
-      el('p', { class: 'muted center', text: 'Folge dem Kreis. Einatmen, ausatmen.' }),
-      el('div', { class: 'breath' }, [orb, phase]),
+      el('p', { class: 'muted center', style: { marginBottom: '4px' }, text: 'Folge dem Ring. Einatmen, kurz halten, ausatmen.' }),
+      stage,
       doneRow(ctx),
     ]));
-    // Phasen-Text im Takt der CSS-Animation (10 s Zyklus).
-    let t = [];
-    const cycle = () => {
-      phase.textContent = 'Einatmen';
-      t.push(setTimeout(() => { phase.textContent = 'Halten'; }, 4000));
-      t.push(setTimeout(() => { phase.textContent = 'Ausatmen'; }, 5500));
-      t.push(setTimeout(cycle, 10000));
+
+    const timers = [];
+    const later = (fn, ms) => { timers.push(setTimeout(fn, ms)); };
+
+    // Ring skaliert, der Glow wird mit der Größe stärker.
+    const setPhase = (scale, glow, ms) => {
+      ring.style.transitionDuration = ms + 'ms';
+      ring.style.setProperty('--s', String(scale));
+      ring.style.setProperty('--glow', glow + 'px');
+      ring.style.setProperty('--glow-a', String(0.10 + 0.32 * (scale - 0.55) / 0.45));
     };
-    const start = setTimeout(cycle, 400);
-    return () => { clearTimeout(start); t.forEach(clearTimeout); };
+    setPhase(0.55, 10, 400);
+
+    const cycle = () => {
+      label.textContent = 'Einatmen';
+      setPhase(1, 46, IN);
+      later(() => { label.textContent = 'Halten'; }, IN);
+      later(() => { label.textContent = 'Ausatmen'; setPhase(0.55, 10, OUT); }, IN + HOLD);
+      later(cycle, IN + HOLD + OUT);
+    };
+
+    // Drei Sekunden Countdown, damit die Übung nicht überfällt.
+    let n = 3;
+    label.textContent = String(n);
+    const tick = () => {
+      n -= 1;
+      if (n > 0) { label.textContent = String(n); later(tick, 1000); }
+      else later(cycle, 1000);
+    };
+    later(tick, 1000);
+
+    return () => timers.forEach(clearTimeout);
   },
 
   leave(body, ctx) {
@@ -148,7 +177,7 @@ const TOOLS = {
         return;
       }
       const playing = ctx.mask.isPlaying();
-      const vol = el('input', { type: 'range', min: '0', max: '100', value: String(Math.round((p.sound.volume ?? 0.5) * 100)), style: { width: '100%' } });
+      const vol = el('input', { class: 'slider', type: 'range', min: '0', max: '100', value: String(Math.round((p.sound.volume ?? 0.5) * 100)) });
       vol.addEventListener('input', () => { const v = vol.value / 100; p.sound.volume = v; ctx.mask.setVolume(v); });
       vol.addEventListener('change', () => ctx.app.save());
       mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
@@ -157,7 +186,7 @@ const TOOLS = {
         el('button', {
           class: 'btn btn-primary',
           onClick: () => { if (ctx.mask.isPlaying()) ctx.mask.stop(); else ctx.mask.start(p.sound.volume ?? 0.5); render(); },
-        }, playing ? '⏸ Anhalten' : '▶ Abspielen'),
+        }, [el('span', { class: 'icon', html: icon(playing ? 'pause' : 'play') }), playing ? ' Anhalten' : ' Abspielen']),
         el('label', { class: 'field' }, [el('span', { class: 'lbl', text: 'Lautstärke' }), vol]),
         doneRow(ctx),
       ]));
@@ -191,18 +220,27 @@ const TOOLS = {
 
 function cycleCards(body, ctx, title, sub, lines) {
   let i = 0;
-  const paint = () => {
-    mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
-      el('h1', { text: title }),
-      el('p', { class: 'muted', text: sub }),
-      el('div', { class: 'card pad-lg' }, el('p', { class: 'big-statement', style: { margin: 0 }, text: lines[i] })),
-      el('div', { class: 'btn-row' }, [
-        el('button', { class: 'btn btn-ghost', onClick: () => { i = (i + 1) % lines.length; buzz(); paint(); } }, 'Nächster Satz'),
-      ]),
-      doneRow(ctx),
-    ]));
-  };
-  paint();
+  // Feste Höhe für die Satzkarte, damit die Buttons beim Wechsel stehen bleiben.
+  const statement = el('p', { class: 'big-statement fade-in', style: { margin: 0 }, text: lines[0] });
+  const card = el('div', { class: 'card pad-lg statement-card tint-green' }, statement);
+
+  const nextBtn = el('button', { class: 'btn btn-primary' }, 'Nächster Satz');
+  nextBtn.addEventListener('click', () => {
+    i = (i + 1) % lines.length;
+    buzz();
+    statement.classList.remove('fade-in');
+    void statement.offsetWidth;          // Animation neu starten
+    statement.textContent = lines[i];
+    statement.classList.add('fade-in');
+  });
+
+  mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
+    el('h1', { text: title }),
+    el('p', { class: 'muted', text: sub }),
+    card,
+    nextBtn,
+    doneRow(ctx),
+  ]));
 }
 
 function copyLine(text) {
@@ -215,11 +253,10 @@ function copyLine(text) {
 }
 
 function doneRow(ctx) {
-  return el('div', { style: { marginTop: '18px' } }, [
-    el('div', { class: 'btn-row' }, [
-      el('button', { class: 'btn btn-ghost', onClick: () => quickCapture(ctx) }, [el('span', { class: 'icon', html: icon('pencil') }), ' Kurz festhalten']),
-      el('button', { class: 'btn btn-quiet', onClick: ctx.close }, 'Schließen'),
-    ]),
+  return el('div', { class: 'done-row' }, [
+    el('button', { class: 'btn btn-ghost', onClick: () => quickCapture(ctx) },
+      [el('span', { class: 'icon', html: icon('pencil') }), ' Kurz festhalten']),
+    el('button', { class: 'btn btn-quiet', onClick: ctx.toList }, 'Zurück zur Auswahl'),
   ]);
 }
 
@@ -259,7 +296,7 @@ function quickCapture(ctx) {
         triggers: [...chosen], situation: null, helped: [], note: '',
       });
       toast('Festgehalten.');
-      ctx.close();
+      ctx.toList();
     };
 
     body.classList.add('scroll');
@@ -270,9 +307,9 @@ function quickCapture(ctx) {
       levelBtns,
       chips ? el('div', { class: 'section-label', text: 'Auslöser' }) : null,
       chips,
-      el('div', { class: 'btn-row', style: { marginTop: '16px' } }, [
+      el('div', { class: 'done-row', style: { marginTop: '16px' } }, [
         el('button', { class: 'btn btn-primary', onClick: save }, 'Speichern'),
-        el('button', { class: 'btn btn-quiet', onClick: ctx.close }, 'Ohne Speichern schließen'),
+        el('button', { class: 'btn btn-quiet', onClick: ctx.toList }, 'Ohne Speichern zurück'),
       ]),
     ]));
   });

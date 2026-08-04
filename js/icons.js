@@ -50,6 +50,17 @@ const ICONS = {
   pencil: '<path d="M4.5 19.5 L5.3 16.1 L15.9 5.5 C16.8 4.6 18.3 4.6 19.2 5.5 C20.1 6.4 20.1 7.9 19.2 8.8 L8.6 19.4 L4.5 19.5 Z"/><path d="M14.6 6.8 L17.9 10.1"/>',
   share: '<circle cx="6.4" cy="12" r="2.3"/><circle cx="17.6" cy="5.9" r="2.3"/><circle cx="17.6" cy="18.1" r="2.3"/><path d="M8.5 10.9 L15.5 7 M8.5 13.1 L15.5 17"/>',
   check: '<path d="M4.8 12.6 L9.8 17.6 L19.2 6.8"/>',
+  play: '<path d="M8 5.4 L18.6 12 L8 18.6 Z"/>',
+  pause: '<path d="M9.2 5.6 V18.4"/><path d="M14.8 5.6 V18.4"/>',
+  plus: '<path d="M12 5.4 V18.6"/><path d="M5.4 12 H18.6"/>',
+
+  // Weitere Situationen
+  dumbbell: '<path d="M4.4 9.6 V14.4"/><path d="M19.6 9.6 V14.4"/><rect x="6.6" y="7.6" width="3" height="8.8" rx="1.2"/><rect x="14.4" y="7.6" width="3" height="8.8" rx="1.2"/><path d="M9.6 12 H14.4"/>',
+  stethoscope: '<path d="M6 4.2 V9.4 A3.6 3.6 0 0 0 13.2 9.4 V4.2"/><path d="M4.4 4.2 H7.6 M11.6 4.2 H14.8"/><path d="M9.6 13 V15.2 A4 4 0 0 0 17.6 15.2 V13.8"/><circle cx="17.6" cy="11.6" r="2.2"/>',
+  car: '<path d="M4.2 15.4 V11.8 L6.2 6.8 H17.8 L19.8 11.8 V15.4"/><path d="M4.2 11.8 H19.8"/><circle cx="7.6" cy="15.6" r="1.8"/><circle cx="16.4" cy="15.6" r="1.8"/><path d="M4.2 17.4 V19 H6.6 V17.4 M17.4 17.4 V19 H19.8 V17.4"/>',
+  plane: '<path d="M10.4 3.6 A1.6 1.6 0 0 1 13.6 3.6 L13.6 9 L21 13.2 V15.4 L13.6 13.4 V17.6 L16 19.4 V20.8 L12 19.6 L8 20.8 V19.4 L10.4 17.6 V13.4 L3 15.4 V13.2 L10.4 9 Z"/>',
+  chat: '<path d="M4.4 5.6 H19.6 V15.4 H11.4 L6.8 19 V15.4 H4.4 Z"/><path d="M8.4 10.4 H15.6"/>',
+  guests: '<circle cx="7.6" cy="8.4" r="2.7"/><circle cx="16.4" cy="8.4" r="2.7"/><path d="M3 18.6 A4.7 4.7 0 0 1 12.2 18.6"/><path d="M11.8 18.6 A4.7 4.7 0 0 1 21 18.6"/>',
 };
 
 export function icon(name, cls = '') {

@@ -40,6 +40,12 @@ export const SITUATIONS = [
   { id: 'restaurant', icon: 'coffee', label: 'Restaurant / Café' },
   { id: 'cinema', icon: 'film', label: 'Kino / Theater' },
   { id: 'shopping', icon: 'bag', label: 'Einkaufen' },
+  { id: 'guests', icon: 'guests', label: 'Besuch zu Hause' },
+  { id: 'sport', icon: 'dumbbell', label: 'Sport / Fitnessstudio' },
+  { id: 'car', icon: 'car', label: 'Auto fahren' },
+  { id: 'travel', icon: 'plane', label: 'Reisen (Flug, Fernbus)' },
+  { id: 'doctor', icon: 'stethoscope', label: 'Wartezimmer / Termin' },
+  { id: 'call', icon: 'chat', label: 'Telefonate' },
   { id: 'sleep', icon: 'moon', label: 'Einschlafen' },
 ];
 
@@ -291,6 +297,57 @@ export const PREPARE = {
       'Ruhige Uhrzeiten nutzen (früh morgens, spät abends): weniger Menschen, weniger Geräusche.',
       'Mit Einkaufszettel bist du schneller wieder draußen.',
       'Kopfhörer oder Ohrstöpsel beim Einkaufen sind völlig legitim.',
+    ],
+  },
+  guests: {
+    icon: 'guests', title: 'Besuch zu Hause',
+    tips: [
+      'Zu Hause hast du das Heimrecht. Du darfst dich zwischendurch in dein Zimmer zurückziehen.',
+      'Musik oder Radio im Hintergrund laufen lassen, bevor der Besuch kommt. Dann ist es von Anfang an normal.',
+      'Wenn geknabbert wird: Setz dich weiter weg oder übernimm eine Aufgabe in der Küche.',
+      'Weihe eine Person ein, die da ist. Dann musst du dich nicht jedes Mal erklären.',
+    ],
+  },
+  sport: {
+    icon: 'dumbbell', title: 'Sport / Fitnessstudio',
+    tips: [
+      'Kopfhörer sind im Studio ohnehin üblich. Nutze sie ruhig durchgehend.',
+      'Geräte am Rand oder in der Nähe der Lüftung sind oft angenehmer als die Mitte.',
+      'Randzeiten sind leerer: früh morgens oder spät abends.',
+      'Bewegung senkt das Stressniveau. Danach treffen Trigger oft weniger hart.',
+    ],
+  },
+  car: {
+    icon: 'car', title: 'Auto fahren',
+    tips: [
+      'Als Beifahrerin oder Beifahrer darfst du Musik oder Lüftung aufdrehen. Das ist eine kleine Bitte, keine große.',
+      'Wenn du selbst fährst, bestimmst du den Ton im Auto.',
+      'Bei längeren Fahrten Pausen einplanen, bevor die Anspannung steigt.',
+    ],
+  },
+  travel: {
+    icon: 'plane', title: 'Reisen (Flug, Fernbus)',
+    tips: [
+      'Sitzplatz vorher reservieren: Fenster, weiter vorn, weg von der Bordküche.',
+      'Ohrstöpsel und Kopfhörer gehören ins Handgepäck, nicht in den Koffer.',
+      'Snackzeiten sind die schwersten Momente. Plane für genau diese Zeit etwas ein, das dich beschäftigt.',
+      'Eine Schlafmaske hilft auch gegen visuelle Trigger.',
+    ],
+  },
+  doctor: {
+    icon: 'stethoscope', title: 'Wartezimmer / Termin',
+    tips: [
+      'Wartezimmer sind still, dadurch fällt jedes Geräusch auf. Nimm dir etwas zum Hören mit.',
+      'Du darfst fragen, ob du draußen oder im Flur warten kannst, bis du dran bist.',
+      'Termine am Anfang der Sprechzeit bedeuten meist weniger Wartende.',
+    ],
+  },
+  call: {
+    icon: 'chat', title: 'Telefonate',
+    tips: [
+      'Kopfhörer mit gutem Mikrofon trennen die Stimme von Nebengeräuschen.',
+      'Wenn Atem- oder Mundgeräusche durchkommen: Halte das Telefon etwas weiter weg oder stell auf Lautsprecher.',
+      'Ein kurzes Telefonat ist völlig in Ordnung. Du musst nichts ausdehnen.',
     ],
   },
   sleep: {
