@@ -110,7 +110,34 @@ Auf Wunsch des Auftraggebers wurde das Design nach einer Behance-Referenz (Menta
 - Grün bleibt die tragende Farbe: tiefes Waldgrün als Primär-, Icon- und Tintenfarbe; Koralle und Bernstein als sparsame Komplementär-Akzente.
 - Serifen-Displayschrift für Überschriften über die systemeigene Serife (`ui-serif`, auf iOS „New York"). Kein externer Font-Download, App bleibt offline-fähig.
 - Outline-Pill-Buttons für Sekundäraktionen, gefüllte tiefgrüne Primär-Buttons; helle Statusleiste und Manifest-Farben.
-- Der ursprüngliche Rahmen „dunkle Grüntöne" wurde damit bewusst zu „tiefes Grün auf warmem hellem Grund" weiterentwickelt. Ein optionaler Dunkelmodus ist ein möglicher späterer Ausbau (alle Farben liegen als CSS-Variablen in `css/styles.css`).
+- Der ursprüngliche Rahmen „dunkle Grüntöne" wurde damit bewusst zu „tiefes Grün auf warmem hellem Grund" weiterentwickelt. Seit v1.4 gibt es zusätzlich einen vollwertigen Dunkelmodus (siehe unten).
+
+---
+
+## 4e. v1.4 — Umsetzung des Betroffenen-Audits
+
+Die App wurde aus der Perspektive einer Misophonie-Betroffenen in zwei Zuständen geprüft (ruhig einrichten / mitten im Triggermoment). Alle Befunde sind umgesetzt:
+
+**Kritisch**
+- **Soforthilfe startet direkt** (`js/sos.js` → `openSOS`, `preferredTool`): „Jetzt Hilfe" öffnet unmittelbar das bevorzugte Werkzeug (zuletzt genutzt, sonst das erste aus dem Onboarding) statt einer Liste mit sieben Optionen. Die Auswahl bleibt über den Zurück-Pfeil einen Tipp entfernt. Grund: Im Triggermoment ist Lesen und Entscheiden genau das, wozu die Person nicht fähig ist.
+- **Wake Lock** (`js/sos.js` → `ScreenAwake`): Das Display bleibt während einer Übung an und wird nach dem Wiedereinblenden erneut angefordert. Vorher brach jede Atemübung nach der Display-Sperre faktisch ab.
+- **Dunkelmodus** (`js/theme.js`, `css/styles.css` → `:root[data-theme="dark"]`): folgt dem System, umstellbar auf Hell/Dunkel. Dazu ein **diskreter Modus**, der Klartext wie „Bist du gerade getriggert?" durch neutrale Beschriftung ersetzt. Grund: Ein hell leuchtendes Display mit lesbarer Schlagzeile outet die Person am Esstisch.
+- **Notausgang im Onboarding** (`js/onboarding.js` → `.ob-escape`): „Ich brauche gerade sofort Hilfe" öffnet aus jedem Schritt die Soforthilfe. Vorher steckte man beim ersten Öffnen in acht Schritten fest.
+
+**Wichtig**
+- **Trigger-Gruppen zugeklappt** mit ehrlicher Vorwarnung (`js/onboarding.js` Schritt 3). Die Wortliste selbst kann Anspannung auslösen; jetzt sind beim Öffnen des Schritts null Reizwörter sichtbar.
+- **Ruheklang** startet sanft (ca. 18 % Lautstärke, dann langsam auf den gespeicherten Wert) und weist auf fehlende Kopfhörer hin.
+- **Vibration abschaltbar** (`js/ui.js` → `setHaptics`, Schalter unter „Mehr"). Auf dem Tisch ist Vibration ein hörbares Geräusch.
+- **Hilfe-Hinweis mit Zeitbezug** (`js/home.js` → `needsCareHint`): nur Einträge der letzten 14 Tage, damit die App nach einer Pause nichts Falsches über das Jetzt behauptet.
+- **Grounding endet ohne Abfrage**: „Fertig" führt zur Auswahl statt ins Tagebuch-Formular.
+- **Neues Werkzeug „Zeigen statt reden"**: ein Satz zum Hinhalten, wenn Sprechen nicht geht.
+
+**Verbesserungen**
+- Manifest-**Kurzbefehl** „Sofort atmen" (`?sos=1`) — Long-Press aufs App-Icon führt direkt in die Soforthilfe.
+- Nach über 30 Minuten Pause öffnet die App auf der Startseite statt auf der zuletzt besuchten Seite.
+- Der 3-Sekunden-Countdown im Atemanker lässt sich durch Antippen des Rings überspringen.
+
+Neue Profilfelder: `theme`, `haptics`, `discreet`, `lastTool`. Fehlende Werkzeuge werden bei bestehenden Profilen beim Start automatisch nachgetragen (`js/app.js` → `boot`). Service-Worker-Cache `misonie-v7`.
 
 ---
 

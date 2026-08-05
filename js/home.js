@@ -36,14 +36,20 @@ export async function renderHome(app) {
     ]));
   }
 
-  // "Im Moment" — prominent, wenn das ein Bedürfnis ist
+  // "Im Moment" — prominent, wenn das ein Bedürfnis ist.
+  // Im diskreten Modus ohne Klartext-Schlagzeile, damit niemand mitlesen kann.
   if (p.needs.includes('moment') || p.needs.length === 0) {
-    view.append(el('div', { class: 'card pad-lg tint-green' }, [
-      el('h2', { text: 'Bist du gerade getriggert?' }),
-      el('p', { class: 'muted', text: 'Tipp einmal. Den Rest machen wir zusammen.' }),
-      el('button', { class: 'btn btn-primary', style: { marginTop: '6px' }, onClick: () => app.openSOS() },
-        [el('span', { class: 'icon', html: icon('rings') }), ' Jetzt Hilfe']),
-    ]));
+    view.append(p.discreet
+      ? el('div', { class: 'card pad-lg tint-green' }, [
+          el('button', { class: 'btn btn-primary', onClick: () => app.openSOS() },
+            [el('span', { class: 'icon', html: icon('rings') }), ' Ruhe']),
+        ])
+      : el('div', { class: 'card pad-lg tint-green' }, [
+          el('h2', { text: 'Bist du gerade getriggert?' }),
+          el('p', { class: 'muted', text: 'Tipp einmal. Den Rest machen wir zusammen.' }),
+          el('button', { class: 'btn btn-primary', style: { marginTop: '6px' }, onClick: () => app.openSOS() },
+            [el('span', { class: 'icon', html: icon('rings') }), ' Jetzt Hilfe']),
+        ]));
   }
 
   // Täglicher Check-in: eigene Situationen zuerst, der Rest auf Wunsch.
@@ -145,9 +151,12 @@ async function safeEntries() {
   try { return await getEntries(); } catch { return []; }
 }
 
-// Behutsam: mind. 3 der letzten 5 Einträge auf Stufe 4–5 -> sanfter Hinweis.
+// Behutsam: mind. 3 von 5 Einträgen auf Stufe 4–5, aber nur aus den letzten
+// zwei Wochen. Sonst behauptet die App nach einer Pause etwas über ein "Jetzt",
+// das längst vorbei ist.
 function needsCareHint(entries) {
-  const recent = entries.slice(0, 5);
+  const cutoff = Date.now() - 14 * 86400000;
+  const recent = entries.filter(e => (e.createdAt || 0) >= cutoff).slice(0, 5);
   if (recent.length < 3) return false;
   const high = recent.filter(e => (e.level || 0) >= 4).length;
   return high >= 3;

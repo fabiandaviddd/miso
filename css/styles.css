@@ -61,6 +61,76 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* ---------- Dunkelmodus ----------
+   Wird von js/app.js gesetzt (System, Hell oder Dunkel).
+   Wichtig fuer Betroffene: Die App wird oft unter Menschen benutzt.
+   Ein helles Display am Esstisch verraet, dass man gerade etwas macht. */
+:root[data-theme="dark"] {
+  --bg:        #0B1410;
+  --bg-2:      #0E1A14;
+  --surface:   #13241C;
+  --surface-2: #182E24;
+  --surface-3: #1E382B;
+  --line:      #22392C;
+  --line-strong: #2F4E3C;
+
+  --green:      #6FBF95;
+  --green-soft: #8FD6AF;
+  --green-deep: #57A87E;
+  --green-ghost: rgba(111, 191, 149, 0.13);
+
+  --tint-green: #14291E;
+  --tint-green-line: #264935;
+  --tint-peach: #2A1E17;
+  --tint-peach-line: #4A3527;
+  --tint-cream: #262015;
+  --tint-cream-line: #443A26;
+
+  --coral: #E08A5F;
+  --amber: #D9AE55;
+
+  --text:  #E4EFE8;
+  --muted: #A0B5A8;
+  --faint: #74897C;
+
+  --lvl-1: #5CC8A0;
+  --lvl-2: #86C98A;
+  --lvl-3: #D8C479;
+  --lvl-4: #D99E6A;
+  --lvl-5: #CF7F6F;
+  --danger: #CF7F6F;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.30), 0 8px 26px rgba(0, 0, 0, 0.38);
+}
+:root[data-theme="dark"] .appbar {
+  background: linear-gradient(var(--bg), rgba(11, 20, 16, 0.88));
+}
+:root[data-theme="dark"] .tabbar {
+  background: linear-gradient(rgba(11, 20, 16, 0), var(--bg) 34%);
+}
+:root[data-theme="dark"] .btn-primary { color: #06170F; }
+:root[data-theme="dark"] .tab.tab-sos { color: #06170F; }
+:root[data-theme="dark"] .entry .dot { color: #06170F; }
+:root[data-theme="dark"] .msg.me .bubble { color: #06170F; }
+:root[data-theme="dark"] .toast { color: #06170F; background: var(--green); border-color: var(--green); }
+:root[data-theme="dark"] input[type="text"],
+:root[data-theme="dark"] input[type="password"],
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select { background: var(--bg-2); }
+:root[data-theme="dark"] .slider::-webkit-slider-thumb { border-color: var(--surface-2); }
+:root[data-theme="dark"] .slider::-moz-range-thumb { border-color: var(--surface-2); }
+:root[data-theme="dark"] .tool {
+  background: radial-gradient(circle at 50% 20%, #10201A, var(--bg));
+}
+:root[data-theme="dark"] .breath-ring {
+  border-color: var(--green);
+  background: radial-gradient(circle at 50% 50%, rgba(111, 191, 149, 0.10), rgba(111, 191, 149, 0.03) 60%, transparent 72%);
+  box-shadow:
+    0 0 var(--glow, 10px) rgba(111, 191, 149, var(--glow-a, 0.12)),
+    inset 0 0 calc(var(--glow, 10px) * 0.7) rgba(111, 191, 149, calc(var(--glow-a, 0.12) * 0.6));
+}
+:root[data-theme="dark"] .note.care { color: #F0C7BD; }
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -394,6 +464,22 @@ input:focus, textarea:focus, select:focus, .chip:focus-visible, .btn:focus-visib
 .ob-body .sub { color: var(--muted); font-size: 1.05rem; }
 .ob-hint { color: var(--faint); font-size: 0.86rem; margin-top: 14px; }
 .ob-foot { display: flex; align-items: center; gap: 12px; padding-top: 12px; flex: none; }
+
+/* Notausgang: erreichbar, aber ohne Drängen */
+.ob-escape {
+  flex: none;
+  width: 100%;
+  min-height: 44px;
+  font-size: 0.92rem;
+  color: var(--faint);
+  padding: 4px 0 0;
+}
+.ob-escape:hover { color: var(--green-deep); }
+
+/* Trigger-Gruppen im Kennenlernen: zugeklappt, bis jemand sie öffnet */
+.trigger-group { padding: 14px 16px; }
+.trigger-group > summary { list-style: none; cursor: pointer; }
+.trigger-group > summary::-webkit-details-marker { display: none; }
 .ob-foot .btn { width: auto; }
 .ob-foot .grow { flex: 1; }
 

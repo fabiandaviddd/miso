@@ -3,7 +3,7 @@
 // ausdrücklichen Tipp.
 import { el, mount, clear, buzz, toast } from './ui.js';
 import {
-  SOS_TOOLS, GROUNDING, EXIT_LINES, REFRAME_LINES, KIND_LINES, TRIGGERS,
+  SOS_TOOLS, GROUNDING, EXIT_LINES, REFRAME_LINES, KIND_LINES, TRIGGERS, SHOW_CARD_TEXT,
 } from './data.js';
 import { addEntry } from './store.js';
 import { icon } from './icons.js';
@@ -14,11 +14,15 @@ export function openSOS(app, directToolId) {
   document.body.style.overflow = 'hidden';
 
   const mask = new MaskPlayer();
+  const screen = new ScreenAwake();   // Display bleibt waehrend der Uebung an
   let cleanup = null;
+
+  screen.request();
 
   function close() {
     if (cleanup) cleanup();
     mask.stop(true);
+    screen.release();
     document.body.style.overflow = '';
     overlay.remove();
   }
@@ -41,11 +45,16 @@ export function openSOS(app, directToolId) {
   function open(toolId) {
     if (!toolId) return toList();
     const builder = TOOLS[toolId];
-    if (builder) show(builder);
+    if (builder) { rememberTool(app, toolId); show(builder); }
     else toList();
   }
 
-  if (directToolId && TOOLS[directToolId]) show(TOOLS[directToolId]);
+  // Im Triggermoment zaehlt jede Sekunde: Statt einer Liste startet sofort
+  // das bevorzugte Werkzeug. Die Auswahl ist von dort einen Tipp entfernt.
+  const startId = directToolId && TOOLS[directToolId]
+    ? directToolId
+    : preferredTool(app.profile);
+  if (startId && TOOLS[startId]) { rememberTool(app, startId); show(TOOLS[startId]); }
   else showList(app, show);
 
   // Escape schließt.
@@ -78,7 +87,7 @@ function showList(app, show) {
         el('span', { class: 'chev', html: '›' }),
       ]));
     }
-    function open(id) { const b = TOOLS[id]; if (b) show(b); }
+    function open(id) { const b = TOOLS[id]; if (b) { rememberTool(app, id); show(b); } }
     body.classList.add('scroll');
     mount(body, wrap);
   }, { back: false });
@@ -122,12 +131,23 @@ const TOOLS = {
     };
 
     // Drei Sekunden Countdown, damit die Übung nicht überfällt.
+    // Wer nicht warten will, tippt auf den Ring und beginnt sofort.
+    let started = false;
+    const startNow = () => {
+      if (started) return;
+      started = true;
+      timers.forEach(clearTimeout);
+      timers.length = 0;
+      cycle();
+    };
+    stage.addEventListener('click', startNow);
+
     let n = 3;
     label.textContent = String(n);
     const tick = () => {
       n -= 1;
       if (n > 0) { label.textContent = String(n); later(tick, 1000); }
-      else later(cycle, 1000);
+      else later(startNow, 1000);
     };
     later(tick, 1000);
 
@@ -157,7 +177,7 @@ const TOOLS = {
           i > 0 ? el('button', { class: 'btn btn-ghost', onClick: () => { i--; paint(); } }, 'Zurück') : null,
           i < GROUNDING.length - 1
             ? el('button', { class: 'btn btn-primary', onClick: () => { i++; buzz(); paint(); } }, 'Weiter')
-            : el('button', { class: 'btn btn-primary', onClick: () => quickCapture(ctx) }, 'Fertig'),
+            : el('button', { class: 'btn btn-primary', onClick: ctx.toList }, 'Fertig'),
         ]),
       ]));
     };
@@ -185,9 +205,16 @@ const TOOLS = {
         el('p', { class: 'muted', text: 'Ein Rauschen, das du drüberlegen kannst. Für den Moment gedacht, nicht für den ganzen Tag.' }),
         el('button', {
           class: 'btn btn-primary',
-          onClick: () => { if (ctx.mask.isPlaying()) ctx.mask.stop(); else ctx.mask.start(p.sound.volume ?? 0.5); render(); },
+          onClick: () => {
+            if (ctx.mask.isPlaying()) ctx.mask.stop();
+            // Immer leise anfangen und erst dann auf die gespeicherte
+            // Lautstärke ziehen. Sonst rauscht das Handy plötzlich am Tisch.
+            else ctx.mask.start(p.sound.volume ?? 0.5, true);
+            render();
+          },
         }, [el('span', { class: 'icon', html: icon(playing ? 'pause' : 'play') }), playing ? ' Anhalten' : ' Abspielen']),
         el('label', { class: 'field' }, [el('span', { class: 'lbl', text: 'Lautstärke' }), vol]),
+        el('p', { class: 'faint small', style: { marginTop: '-4px' }, text: 'Ohne Kopfhörer hören es die anderen mit.' }),
         doneRow(ctx),
       ]));
     };
@@ -208,6 +235,23 @@ const TOOLS = {
         ]),
       ]),
       el('button', { class: 'btn btn-ghost', onClick: () => { ctx.show(TOOLS.breathe); } }, [el('span', { class: 'icon', html: icon('breathe') }), ' Mit dem Atem begleiten']),
+      doneRow(ctx),
+    ]));
+  },
+
+  show_card(body, ctx) {
+    // Fuer Momente, in denen Reden nicht geht: Satz zum Hinhalten.
+    const p = ctx.app.profile;
+    const text = SHOW_CARD_TEXT;
+    mount(body, el('div', { class: 'stack', style: { width: '100%' } }, [
+      el('h1', { text: 'Zeigen statt reden' }),
+      el('p', { class: 'muted', text: 'Halte dem Menschen neben dir einfach das Handy hin. Du musst nichts sagen.' }),
+      el('div', { class: 'card pad-lg tint-green' },
+        el('p', { class: 'big-statement', style: { margin: 0 }, text: text })),
+      el('button', { class: 'btn btn-ghost', onClick: async () => {
+        try { await navigator.clipboard.writeText(text); toast('Kopiert'); }
+        catch { toast('Zum Kopieren markieren'); }
+      } }, [el('span', { class: 'icon', html: icon('share') }), ' Text kopieren']),
       doneRow(ctx),
     ]));
   },
@@ -315,6 +359,44 @@ function quickCapture(ctx) {
   });
 }
 
+// Welches Werkzeug soll die Soforthilfe direkt oeffnen?
+function preferredTool(profile) {
+  const ids = (profile && profile.sosTools && profile.sosTools.length)
+    ? profile.sosTools : SOS_TOOLS.map(t => t.id);
+  const last = profile && profile.lastTool;
+  if (last && ids.includes(last)) return last;
+  return ids[0];
+}
+
+function rememberTool(app, id) {
+  if (!app.profile || app.profile.lastTool === id) return;
+  app.profile.lastTool = id;
+  app.save().catch(() => {});
+}
+
+// Haelt das Display waehrend einer Uebung wach. Ohne das wird der Bildschirm
+// mitten im Atmen schwarz.
+class ScreenAwake {
+  constructor() { this.lock = null; this.onVisible = null; }
+  async request() {
+    if (!('wakeLock' in navigator)) return;
+    try { this.lock = await navigator.wakeLock.request('screen'); }
+    catch { return; }
+    this.onVisible = async () => {
+      if (document.visibilityState === 'visible' && this.lock === null) {
+        try { this.lock = await navigator.wakeLock.request('screen'); } catch {}
+      }
+    };
+    document.addEventListener('visibilitychange', this.onVisible);
+    this.lock.addEventListener?.('release', () => { this.lock = null; });
+  }
+  release() {
+    if (this.onVisible) document.removeEventListener('visibilitychange', this.onVisible);
+    try { this.lock?.release(); } catch {}
+    this.lock = null;
+  }
+}
+
 function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function todayStr() { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
 function pad(n) { return String(n).padStart(2, '0'); }
@@ -324,7 +406,7 @@ function pad(n) { return String(n).padStart(2, '0'); }
 class MaskPlayer {
   constructor() { this.ctx = null; this.src = null; this.gain = null; this.playing = false; }
   isPlaying() { return this.playing; }
-  start(volume = 0.5) {
+  start(volume = 0.5, gentle = false) {
     try {
       this.ctx = this.ctx || new (window.AudioContext || window.webkitAudioContext)();
       if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -337,7 +419,13 @@ class MaskPlayer {
       gain.gain.value = 0.0001;
       src.connect(lp); lp.connect(gain); gain.connect(this.ctx.destination);
       src.start();
-      gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, volume), this.ctx.currentTime + 0.8);
+      const target = Math.max(0.0002, volume);
+      // Sanfter Einstieg: erst deutlich leiser, dann langsam auf den Wert.
+      const first = gentle ? Math.min(target, 0.18) : target;
+      gain.gain.exponentialRampToValueAtTime(first, this.ctx.currentTime + 0.8);
+      if (gentle && target > first) {
+        gain.gain.exponentialRampToValueAtTime(target, this.ctx.currentTime + 3.2);
+      }
       this.src = src; this.gain = gain; this.playing = true;
     } catch (e) { toast('Klang nicht verfügbar'); }
   }

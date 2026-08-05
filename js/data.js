@@ -7,6 +7,7 @@ export const TRIGGERS = {
   hear: {
     label: 'Hören',
     hint: 'Geräusche, die dich treffen',
+    warn: true,
     items: ['Kauen', 'Schmatzen', 'Schlürfen', 'Luft einziehen / Schniefen', 'Atmen',
       'Schlucken', 'Räuspern / Husten', 'Kaugummikauen', 'Tippen / Tastatur',
       'Klicken (Stift, Maus)', 'Fußwippen-Geräusch', 'Besteck / Geschirr', 'Uhr-Ticken',
@@ -68,7 +69,12 @@ export const SOS_TOOLS = [
   { id: 'surf', icon: 'wave', title: 'Die Welle reiten', sub: 'Die Wut steigt und ebbt wieder ab', suggestFrom: [] },
   { id: 'reframe', icon: 'compass', title: 'Umdeuten', sub: 'Es ist nicht gegen dich gerichtet', suggestFrom: ['reframe'] },
   { id: 'kind', icon: 'heart', title: 'Freundlich zu dir', sub: 'Du reagierst nicht falsch', suggestFrom: [] },
+  { id: 'show_card', icon: 'share', title: 'Zeigen statt reden', sub: 'Einen Satz hinhalten, wenn Sprechen nicht geht', suggestFrom: [] },
 ];
+
+// Satz zum Hinhalten, wenn Reden im Moment nicht geht.
+export const SHOW_CARD_TEXT =
+  'Bestimmte Geräusche lösen bei mir gerade sehr viel Stress aus. Das liegt nicht an dir. Ich brauche kurz Abstand und bin gleich wieder da.';
 
 // Grounding-Schritte (5-4-3-2-1).
 export const GROUNDING = [

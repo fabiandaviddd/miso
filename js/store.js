@@ -62,6 +62,10 @@ export function defaultProfile() {
     helps: [],              // help-ids
     sosTools: [],           // geordnete tool-ids für die Notfallhilfe
     sound: { enabled: false, volume: 0.5 },
+    theme: 'system',        // 'system' | 'light' | 'dark'
+    haptics: true,          // Vibration bei Tipps
+    discreet: false,        // unauffällige Beschriftungen
+    lastTool: null,         // zuletzt genutztes Sofort-Werkzeug
     ai: { enabled: false, apiKey: '', model: 'claude-sonnet-5' }, // BYOK, lokal
     seenDisclaimer: false,
   };

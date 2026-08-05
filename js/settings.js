@@ -4,6 +4,7 @@ import { SOS_TOOLS, DISCLAIMER } from './data.js';
 import { exportAll, importAll, wipeAll, getProfile, defaultProfile, saveProfile } from './store.js';
 import { icon } from './icons.js';
 import { AI_MODELS, defaultAI, callAI } from './ai.js';
+import { applyTheme } from './theme.js';
 
 export async function renderSettings(app) {
   const p = app.profile;
@@ -16,6 +17,42 @@ export async function renderSettings(app) {
     el('h3', { text: 'Dein Name' }),
     el('label', { class: 'field' }, [nameInput]),
   ]));
+
+  // Darstellung, Vibration, Diskretion
+  {
+    const card = el('div', { class: 'card stack' });
+    const paint = () => {
+      const themeBtn = (val, label) => {
+        const on = (p.theme || 'system') === val;
+        const b = el('button', { class: 'btn ' + (on ? 'btn-primary' : 'btn-ghost') }, label);
+        b.addEventListener('click', async () => {
+          p.theme = val; await app.save(); applyTheme(val); paint();
+        });
+        return b;
+      };
+      const hapticBtn = el('button', { class: 'btn ' + (p.haptics !== false ? 'btn-primary' : 'btn-ghost') },
+        p.haptics !== false ? 'Vibration: an' : 'Vibration: aus');
+      hapticBtn.addEventListener('click', async () => { p.haptics = p.haptics === false; await app.save(); paint(); });
+
+      const discreetBtn = el('button', { class: 'btn ' + (p.discreet ? 'btn-primary' : 'btn-ghost') },
+        p.discreet ? 'Diskreter Modus: an' : 'Diskreter Modus: aus');
+      discreetBtn.addEventListener('click', async () => { p.discreet = !p.discreet; await app.save(); app.rerender(); });
+
+      mount(card, [
+        el('h3', { text: 'Darstellung' }),
+        el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Dunkel ist unterwegs und am Tisch angenehmer und fällt weniger auf.' }),
+        el('div', { class: 'btn-row' }, [themeBtn('system', 'System'), themeBtn('light', 'Hell'), themeBtn('dark', 'Dunkel')]),
+        el('hr', { class: 'sep' }),
+        el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Vibration ist auf dem Tisch ein hörbares Geräusch. Du kannst sie ausschalten.' }),
+        hapticBtn,
+        el('hr', { class: 'sep' }),
+        el('p', { class: 'muted', style: { marginTop: 0 }, text: 'Im diskreten Modus steht nirgends groß „getriggert“ auf dem Bildschirm. Praktisch, wenn jemand mitlesen könnte.' }),
+        discreetBtn,
+      ]);
+    };
+    paint();
+    view.append(card);
+  }
 
   // Ruheklang
   const soundToggle = el('button', { class: 'btn ' + (p.sound.enabled ? 'btn-primary' : 'btn-ghost') },
@@ -117,7 +154,7 @@ export async function renderSettings(app) {
   ]));
 
   view.append(el('p', { class: 'disclaimer', text: DISCLAIMER }));
-  view.append(el('p', { class: 'disclaimer', text: 'MisoNIE · lokale PWA · v1.3' }));
+  view.append(el('p', { class: 'disclaimer', text: 'MisoNIE · lokale PWA · v1.4' }));
 
   return view;
 }

@@ -40,6 +40,13 @@ export function renderOnboarding(app, root) {
       el('div', { class: 'ob-content' }, step.body(ctx)));
 
     const isLast = i === steps.length - 1;
+    // Wer die App zum ersten Mal mitten im Triggermoment öffnet, soll nicht
+    // erst acht Schritte durchlaufen müssen.
+    const escape = el('button', {
+      class: 'btn btn-quiet ob-escape',
+      onClick: () => app.openSOS(),
+    }, 'Ich brauche gerade sofort Hilfe');
+
     const foot = el('div', { class: 'ob-foot' }, [
       i > 0 ? el('button', { class: 'btn btn-quiet auto', text: 'Zurück', onClick: back }) : null,
       el('div', { class: 'grow' }),
@@ -51,7 +58,7 @@ export function renderOnboarding(app, root) {
       }),
     ]);
 
-    mount(root, el('div', { class: 'ob' }, [dots, body, foot]));
+    mount(root, el('div', { class: 'ob' }, [dots, body, escape, foot]));
   }
 
   paint();
@@ -114,6 +121,8 @@ function buildSteps() {
     },
 
     // 3 — Trigger (Hören / Sehen / schon der Gedanke) + eigene
+    // Wichtig: Die Wortliste selbst kann Anspannung auslösen. Deshalb sind
+    // die Gruppen zugeklappt und es steht vorher ehrlich da, was kommt.
     {
       canSkip: true,
       body: (ctx) => {
@@ -121,14 +130,23 @@ function buildSteps() {
         wrap.append(
           el('div', { class: 'kicker', text: 'Kennenlernen' }),
           el('h1', { text: 'Was sind deine Auslöser?' }),
-          el('p', { class: 'sub', text: 'Tippe an, was dich trifft: beim Hören, beim Sehen oder schon im Voraus. Ich spiele nichts davon ab, du liest nur.' }),
+          el('p', { class: 'sub', text: 'Ich spiele nichts ab, du liest nur. Trotzdem ehrlich vorweg: In den Listen stehen Geräusch-Wörter, und manchen reicht schon das Lesen. Öffne nur, was du magst, oder überspringe den Schritt.' }),
         );
         for (const key of ['hear', 'see', 'anticipate']) {
           const group = TRIGGERS[key];
-          wrap.append(
-            el('div', { class: 'section-label', text: group.label + ' · ' + group.hint }),
+          const chosen = ctx.draft.triggers.filter(t => t.type === key).length;
+          const box = el('details', { class: 'card trigger-group', open: chosen > 0 ? true : null }, [
+            el('summary', { class: 'sum-icon' }, [
+              el('span', { class: 'icon', html: icon(key === 'hear' ? 'volume' : key === 'see' ? 'eye' : 'activity') }),
+              el('span', {}, [
+                el('span', { style: { fontWeight: '600' }, text: group.label }),
+                el('span', { class: 'faint small', text: `  ${group.items.length} Beispiele` + (chosen ? ` · ${chosen} gewählt` : '') }),
+              ]),
+            ]),
+            el('p', { class: 'muted small', style: { margin: '10px 0 8px' }, text: group.hint }),
             triggerChips(ctx, key, group.items),
-          );
+          ]);
+          wrap.append(box);
         }
         wrap.append(customTriggerAdder(ctx));
         return wrap;
@@ -282,8 +300,9 @@ export function deriveSosTools(draft) {
   for (const tool of SOS_TOOLS) {
     if (tool.suggestFrom && tool.suggestFrom.some(h => draft.helps.includes(h))) chosen.add(tool.id);
   }
-  // Kern-Werkzeuge immer verfügbar, in ruhiger Reihenfolge auffüllen.
-  const order = ['breathe', 'leave', 'ground', 'reframe', 'surf', 'kind', 'mask'];
+  // Kern-Werkzeuge immer verfügbar, in der Reihenfolge aus data.js.
+  // Bewusst nicht hart codiert, damit neue Werkzeuge nicht vergessen werden.
+  const order = SOS_TOOLS.map(t => t.id);
   const result = [];
   for (const id of order) if (chosen.has(id)) result.push(id);
   for (const id of order) if (!result.includes(id)) result.push(id);

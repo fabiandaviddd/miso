@@ -84,6 +84,24 @@ Wichtig zu wissen: Der Schlüssel bleibt nur auf deinem Gerät (er landet nie in
 
 ---
 
+## 6c. Wenn es dir gerade schlecht geht
+
+**Der grüne Knopf unten in der Mitte bringt dich sofort zu einer Übung** – ohne Liste, ohne Auswahl. Du landest direkt bei dem, was du zuletzt benutzt hast. Falls du etwas anderes möchtest, tippe oben links auf den Pfeil, dann siehst du alle Werkzeuge.
+
+Noch schneller geht es so: **Halte das MisoNIE-Symbol auf dem Startbildschirm gedrückt.** Dann erscheint „Sofort atmen" und du bist mit einem Tipp drin.
+
+Drei Dinge, die dir das Leben leichter machen können (alles unter **Mehr ⋯ → Darstellung**):
+
+- **Dunkel:** Die App folgt normalerweise deinem Handy. Du kannst sie aber fest auf dunkel stellen. Am Tisch oder im Bus fällt ein dunkles Display deutlich weniger auf.
+- **Vibration aus:** Wenn dein Handy auf dem Tisch liegt, ist Vibration ein hörbares Brummen. Du kannst sie komplett abschalten.
+- **Diskreter Modus:** Dann steht nirgends groß „getriggert" auf dem Bildschirm. Praktisch, wenn jemand mitlesen könnte.
+
+Und falls du gerade nicht reden kannst: Unter den Werkzeugen findest du **„Zeigen statt reden"** – ein fertiger Satz, den du der Person neben dir einfach hinhalten kannst.
+
+Während einer Übung bleibt der Bildschirm an, damit dir nicht mitten im Atmen alles schwarz wird.
+
+---
+
 ## 7. Sichere deine Daten (kurz, aber wichtig)
 
 Weil alles nur auf deinem Gerät liegt, gehen deine Einträge verloren, wenn du das Gerät wechselst oder den Browser-Speicher löschst. Deshalb: unter **Mehr (⋯) → „Sicherung exportieren"** ab und zu eine Sicherungsdatei speichern. Auf einem neuen Gerät kannst du sie mit **„Sicherung laden"** wieder einspielen.

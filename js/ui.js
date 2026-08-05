@@ -52,7 +52,12 @@ export function toast(msg) {
 }
 
 // Sanftes haptisches Feedback, wo verfügbar (nie Ton).
+// Abschaltbar: Auf dem Tisch ist Vibration ein hörbares Geräusch, und das
+// ist in einer Misophonie-App das Letzte, was jemand brauchen kann.
+let hapticsOn = true;
+export function setHaptics(on) { hapticsOn = !!on; }
 export function buzz(ms = 12) {
+  if (!hapticsOn) return;
   try { if (navigator.vibrate) navigator.vibrate(ms); } catch {}
 }
 
